@@ -19,3 +19,6 @@ next-env.d.ts
 npm-debug.log*
 .env*.local
 .vercel
+/.impeccable/mocks/
+/.impeccable/questions/
+/.impeccable/review/

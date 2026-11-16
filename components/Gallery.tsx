@@ -3,30 +3,29 @@
 import { useCallback, useRef, useState } from "react";
 import { site } from "@/content/site";
 import { Lightbox } from "./Lightbox";
-import { Picture } from "./Picture";
-import { Reveal } from "./Reveal";
+import { Panel } from "./Panel";
 
 /**
- * Editorial contact-sheet layout. Each entry: mobile (2 cols) / tablet (8 cols) / desktop (12 cols)
- * placement, frame aspect and responsive sizes. Deliberately uneven.
+ * A salon hang: frames of different sizes packed edge to edge on one wall, the
+ * way paintings hang in the house. Square grid units; [column, row] placements
+ * for phones (4 columns) and for tablets and desktops (12 columns).
  */
-const layout: { cls: string; aspect: string; sizes: string }[] = [
-  { cls: "col-span-2 md:col-span-5 lg:col-span-7 lg:col-start-1", aspect: "aspect-[4/3] md:aspect-[4/3]", sizes: "(min-width:1024px) 56vw, (min-width:768px) 60vw, 100vw" },
-  { cls: "md:col-span-3 md:mt-24 lg:col-span-4 lg:col-start-9 lg:mt-28", aspect: "aspect-[3/4] md:aspect-[3/4]", sizes: "(min-width:1024px) 32vw, (min-width:768px) 36vw, 50vw" },
-  { cls: "mt-10 md:col-span-4 md:col-start-2 md:mt-0 lg:col-span-5 lg:col-start-2", aspect: "aspect-[3/4] md:aspect-[3/4]", sizes: "(min-width:1024px) 40vw, (min-width:768px) 48vw, 50vw" },
-  { cls: "col-span-2 md:col-span-3 md:col-start-6 md:mt-32 lg:col-span-3 lg:col-start-8 lg:mt-40", aspect: "aspect-[3/4] md:aspect-[3/4]", sizes: "(min-width:1024px) 24vw, (min-width:768px) 36vw, 100vw" },
-  { cls: "md:col-span-3 md:col-start-1 lg:col-span-4 lg:col-start-1", aspect: "aspect-[3/4] md:aspect-[3/4]", sizes: "(min-width:1024px) 32vw, (min-width:768px) 36vw, 50vw" },
-  { cls: "mt-10 md:col-span-5 md:col-start-4 md:mt-20 lg:col-span-7 lg:col-start-6 lg:mt-24", aspect: "aspect-[3/4] md:aspect-[4/3]", sizes: "(min-width:1024px) 56vw, (min-width:768px) 60vw, 50vw" },
-  { cls: "col-span-2 md:col-span-6 md:col-start-2 lg:col-span-7 lg:col-start-3", aspect: "aspect-[4/3] md:aspect-[4/3]", sizes: "(min-width:1024px) 56vw, (min-width:768px) 72vw, 100vw" },
-  { cls: "md:col-span-3 md:col-start-1 md:mt-0 lg:col-span-3 lg:col-start-10 lg:mt-48", aspect: "aspect-[3/4] md:aspect-[3/4]", sizes: "(min-width:1024px) 24vw, (min-width:768px) 36vw, 50vw" },
-  { cls: "mt-10 md:col-span-3 md:col-start-5 md:mt-28 lg:col-span-3 lg:col-start-1 lg:mt-16", aspect: "aspect-[3/4] md:aspect-[4/5]", sizes: "(min-width:1024px) 24vw, (min-width:768px) 36vw, 50vw" },
-  { cls: "col-span-2 md:col-span-4 md:col-start-1 lg:col-span-6 lg:col-start-5", aspect: "aspect-[4/3] md:aspect-[4/3]", sizes: "(min-width:1024px) 48vw, (min-width:768px) 60vw, 100vw" },
-  { cls: "md:col-span-4 md:col-start-5 md:mt-24 lg:col-span-5 lg:col-start-2 lg:mt-6", aspect: "aspect-[3/4] md:aspect-[4/3]", sizes: "(min-width:1024px) 40vw, (min-width:768px) 48vw, 50vw" },
-  { cls: "mt-10 md:col-span-4 md:col-start-2 md:mt-0 lg:col-span-4 lg:col-start-8 lg:mt-36", aspect: "aspect-[3/4] md:aspect-[4/3]", sizes: "(min-width:1024px) 32vw, (min-width:768px) 48vw, 50vw" },
+const hang: { m: [string, string]; d: [string, string]; sizes: string }[] = [
+  { m: ["1 / span 4", "1 / span 3"], d: ["1 / span 5", "1 / span 4"], sizes: "(min-width:768px) 42vw, 100vw" },
+  { m: ["1 / span 4", "7 / span 3"], d: ["6 / span 4", "1 / span 3"], sizes: "(min-width:768px) 34vw, 100vw" },
+  { m: ["1 / span 2", "4 / span 3"], d: ["10 / span 3", "1 / span 4"], sizes: "(min-width:768px) 25vw, 50vw" },
+  { m: ["3 / span 2", "4 / span 3"], d: ["6 / span 2", "4 / span 3"], sizes: "(min-width:768px) 17vw, 50vw" },
+  { m: ["3 / span 2", "12 / span 2"], d: ["8 / span 2", "4 / span 3"], sizes: "(min-width:768px) 17vw, 50vw" },
+  { m: ["1 / span 2", "10 / span 4"], d: ["1 / span 3", "5 / span 5"], sizes: "(min-width:768px) 25vw, 50vw" },
+  { m: ["3 / span 2", "10 / span 2"], d: ["4 / span 2", "5 / span 3"], sizes: "(min-width:768px) 17vw, 50vw" },
+  { m: ["1 / span 4", "17 / span 2"], d: ["10 / span 3", "5 / span 2"], sizes: "(min-width:768px) 25vw, 100vw" },
+  { m: ["1 / span 4", "14 / span 3"], d: ["6 / span 5", "7 / span 3"], sizes: "(min-width:768px) 42vw, 100vw" },
+  { m: ["1 / span 2", "19 / span 2"], d: ["11 / span 2", "7 / span 3"], sizes: "(min-width:768px) 17vw, 50vw" },
+  { m: ["3 / span 2", "19 / span 2"], d: ["4 / span 2", "8 / span 2"], sizes: "(min-width:768px) 17vw, 50vw" },
 ];
 
 export function Gallery() {
-  const { label, heading, hint, images } = site.gallery;
+  const { heading, hint, images } = site.gallery;
   const [index, setIndex] = useState<number | null>(null);
   const lastOpened = useRef(0);
   const buttons = useRef<(HTMLButtonElement | null)[]>([]);
@@ -41,48 +40,57 @@ export function Gallery() {
   }, []);
 
   return (
-    <section id="gallery" aria-labelledby="gallery-title" className="cv-auto bg-stone py-24 md:py-36 lg:py-44">
-      <div className="px-page mx-auto max-w-[1680px]">
-        <Reveal as="header" className="mb-14 flex flex-col gap-6 md:mb-20 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="label text-gold-text">{label}</p>
-            <h2 id="gallery-title" className="font-display mt-6 text-[clamp(2.6rem,9vw,5.75rem)] leading-none">
-              {heading}
-            </h2>
-          </div>
-          <p className="font-display text-[0.9375rem] italic text-ink-soft">{hint}</p>
-        </Reveal>
+    <section id="gallery" aria-labelledby="gallery-title" className="cv-auto bg-plaster-deep py-24 md:py-32 lg:py-40">
+      <div className="px-page mx-auto max-w-[1720px]">
+        <div className="mb-10 flex flex-col gap-3 md:mb-14 md:flex-row md:items-baseline md:justify-between">
+          <h2 id="gallery-title" className="font-display text-[clamp(2.25rem,8.4vw,3.25rem)] leading-none md:text-[clamp(2.75rem,4.6vw,4.75rem)]">
+            {heading}
+          </h2>
+          <p className="text-[0.9375rem] text-ink-soft">{hint}</p>
+        </div>
 
-        <ul className="grid grid-cols-2 items-start gap-x-3 gap-y-3 md:grid-cols-8 md:gap-x-6 md:gap-y-6 lg:grid-cols-12 lg:gap-y-10">
-          {images.map((img, i) => {
-            const l = layout[i % layout.length]!;
-            return (
-              <li key={`${img.slug}-${i}`} className={l.cls}>
-                <button
-                  ref={(el) => {
-                    buttons.current[i] = el;
-                  }}
-                  type="button"
-                  onClick={() => {
-                    lastOpened.current = i;
-                    setIndex(i);
-                  }}
-                  aria-label={`Open photograph ${i + 1} of ${images.length}: ${img.alt}`}
-                  aria-haspopup="dialog"
-                  className="group block w-full text-left"
+        <div className="@container">
+          <ul className="grid grid-cols-4 gap-2.5 [grid-auto-rows:calc((100cqw-3*0.625rem)/4)] md:grid-cols-12 md:gap-3.5 md:[grid-auto-rows:calc((100cqw-11*0.875rem)/12)]">
+            {images.map((img, i) => {
+              const h = hang[i]!;
+              return (
+                <li
+                  key={`${img.slug}-${i}`}
+                  className="[grid-column:var(--mc)] [grid-row:var(--mr)] md:[grid-column:var(--dc)] md:[grid-row:var(--dr)]"
+                  style={
+                    {
+                      ["--mc" as string]: h.m[0],
+                      ["--mr" as string]: h.m[1],
+                      ["--dc" as string]: h.d[0],
+                      ["--dr" as string]: h.d[1],
+                    } as React.CSSProperties
+                  }
                 >
-                  <Picture
-                    image={img}
-                    aspectClass={l.aspect}
-                    sizes={l.sizes}
-                    decorative
-                    imgClassName="transition-transform duration-[1200ms] ease-[var(--ease-out)] [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-[1.03]"
-                  />
-                </button>
-              </li>
-            );
-          })}
-        </ul>
+                  <button
+                    ref={(el) => {
+                      buttons.current[i] = el;
+                    }}
+                    type="button"
+                    onClick={() => onIndex(i)}
+                    aria-label={`Open photograph ${i + 1} of ${images.length}: ${img.alt}`}
+                    aria-haspopup="dialog"
+                    className="group block h-full w-full"
+                  >
+                    <Panel
+                      image={img}
+                      sizes={h.sizes}
+                      decorative
+                      mat={8}
+                      radius={10}
+                      className="h-full w-full"
+                      imgClassName="transition-transform duration-[1200ms] ease-[var(--ease-out)] [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-[1.035]"
+                    />
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       </div>
 
       <Lightbox images={images} index={index} onIndex={onIndex} onClose={onClose} />

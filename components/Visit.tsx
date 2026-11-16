@@ -1,6 +1,5 @@
 import { site } from "@/content/site";
-import { Picture } from "./Picture";
-import { Reveal } from "./Reveal";
+import { Panel } from "./Panel";
 
 const hrefFor = {
   whatsapp: site.contact.whatsappUrl,
@@ -8,46 +7,52 @@ const hrefFor = {
   tiktok: site.contact.tiktokUrl,
 } as const;
 
+/** The way in: the place set large, the facts ruled like a visiting card, and the door. */
 export function Visit() {
-  const { label, heading, lines, image, contacts } = site.visit;
+  const { heading, lines, image, contacts } = site.visit;
   return (
-    <section id="visit" aria-labelledby="visit-title" className="cv-auto bg-ivory py-24 md:py-36 lg:py-44">
-      <div className="px-page mx-auto grid max-w-[1680px] grid-cols-4 gap-x-5 md:grid-cols-8 md:gap-x-6 lg:grid-cols-12">
-        <Reveal className="col-span-4 md:col-span-5 lg:col-span-6">
-          <p className="label text-gold-text">{label}</p>
-          <h2 id="visit-title" className="font-display mt-6 text-[clamp(4rem,17vw,12rem)] italic leading-[0.85] tracking-[-0.03em]">
+    <section id="visit" aria-labelledby="visit-title" className="cv-auto bg-plaster py-24 md:py-32 lg:py-40">
+      <div className="px-page mx-auto grid max-w-[1720px] gap-14 md:grid-cols-12 md:gap-x-6">
+        <div className="md:col-span-7 lg:col-span-6">
+          <h2 id="visit-title" className="inscription text-[clamp(4.25rem,21vw,7rem)] md:text-[clamp(6rem,12vw,12rem)]">
             {heading}
           </h2>
-          <div className="mt-10 max-w-[40ch] space-y-4 text-[1.0625rem] leading-relaxed text-ink-soft">
+          <div className="mt-8 max-w-[44ch] space-y-4 text-[1.0625rem] leading-relaxed text-ink-soft">
             {lines.map((l) => (
               <p key={l}>{l}</p>
             ))}
           </div>
-
           <address className="mt-12 not-italic">
-            <ul className="border-t border-ink/15">
+            <ul className="border-t border-gilt/50">
               {contacts.map((c) => {
                 const external = c.key !== "phone";
                 return (
-                  <li key={c.key} className="border-b border-ink/15">
+                  <li key={c.key} className="border-b border-gilt/50">
                     <a
                       href={hrefFor[c.key]}
                       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                      className="group flex min-h-16 items-center justify-between gap-4 py-3 transition-colors duration-300 hover:text-gold-text"
+                      className="group flex min-h-16 items-center justify-between gap-4 py-3"
                     >
-                      <span className="label text-gold-text">{c.label}</span>
-                      <span className="text-[1.0625rem] tracking-[0.04em] tabular-nums md:text-lg">{c.value}</span>
+                      <span className="text-[0.9375rem] text-gilt-text">{c.label}</span>
+                      <span className="num font-display text-[1.25rem] transition-colors duration-300 group-hover:text-teal md:text-[1.5rem]">
+                        {c.value}
+                      </span>
                     </a>
                   </li>
                 );
               })}
             </ul>
           </address>
-        </Reveal>
-
-        <Reveal className="col-span-3 col-start-2 mt-16 md:col-span-3 md:col-start-6 md:mt-24 lg:col-span-4 lg:col-start-8 lg:mt-12" delay={0.1}>
-          <Picture image={image} aspect="3 / 4" sizes="(min-width:1024px) 32vw, (min-width:768px) 36vw, 75vw" />
-        </Reveal>
+        </div>
+        <div className="md:col-span-4 md:col-start-9 md:self-end">
+          <Panel
+            image={image}
+            shape="arch"
+            mat={12}
+            sizes="(min-width: 768px) 32vw, 80vw"
+            className="mx-auto aspect-[3/4.4] w-[80%] max-w-sm md:w-full"
+          />
+        </div>
       </div>
     </section>
   );

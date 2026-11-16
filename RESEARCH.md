@@ -79,3 +79,14 @@ Mood: white marble and white plaster under soft daylight, interrupted by near-bl
 ## Design thesis
 
 The Peacock Mansion is a house of white marble and black lacquer lit by gold, so the site should behave like an illustrated monograph of that house: ivory pages, deep ink, a thread of gold leaf and one note of peacock teal taken from its own curtains and chandelier glass. A Bodoni-style display serif carries the Rococo voice; a quiet geometric sans handles everything practical. Photographs lead and text whispers. The signature moment is the hero opening through an arched doorway, the same arch as the mansion's own black doors, into the fountain at dusk. Every section ends by pointing to one action: a WhatsApp conversation with the house.
+
+## v2 addendum: references studied after the owner's feedback
+
+Live sites reviewed on 16 Nov 2026 for principles only: [Airelles Le Grand Contrôle](https://airelles.com/en/destination/chateau-de-versailles-hotel), [Hôtel de Crillon](https://www.rosewoodhotels.com/en/hotel-de-crillon), [The Fife Arms](https://thefifearms.com/), [Terreno](https://www.terrenohotel.com/), [Cliveden House](https://www.clivedenhouse.co.uk/), [Belmond Hotel Cipriani](https://www.belmond.com/hotels/europe/italy/venice/belmond-hotel-cipriani/), and the [Awwwards hotel and restaurant category](https://www.awwwards.com/websites/hotel-restaurant/). Cheval Blanc returned "Access Denied" and was not bypassed.
+
+What carried into v2:
+- The Fife Arms hangs a single framed photograph on a textured wall instead of going full-bleed. Framing makes amateur photography look curated, which suits listing photos.
+- Terreno and Cliveden put a working booking control in the first viewport. v2 puts a working date field there.
+- Crillon and Airelles set the name as a quiet, wide serif inscription with plenty of air.
+
+Revised thesis: the site is the house's own panelled wall. Every photograph hangs in a Louis XV moulding with concave corners and a gilt line that draws itself as you arrive, on cool plaster white (the real walls), with black lacquer from the doors and teal from the salon curtains.

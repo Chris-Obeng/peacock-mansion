@@ -78,7 +78,7 @@ export const site = {
   ],
 
   nav: [
-    { label: "House", href: "#house" },
+    { label: "The house", href: "#house" },
     { label: "Gallery", href: "#gallery" },
     { label: "Enquire", href: "#enquire" },
   ],
@@ -86,13 +86,17 @@ export const site = {
   skipLink: "Skip to content",
 
   hero: {
-    label: "Kumasi · Ghana",
     nameLines: ["The Peacock", "Mansion"],
-    line: "A private Rococo house for small weddings, family ceremonies and the photographs that follow.",
-    cta: "Plan your day",
-    image: { slug: "fountain-dusk", alt: alt.fountainDusk, position: "28% 55%" } satisfies SiteImage,
+    line: "A private Rococo house in Kumasi, kept for small weddings, family ceremonies and the photographs that follow.",
+    image: { slug: "fountain-dusk", alt: alt.fountainDusk, position: "30% 24%" } satisfies SiteImage,
     /** Art-directed crop for portrait screens. */
-    portrait: { slug: "fountain-portrait", alt: alt.fountainPortrait } satisfies SiteImage,
+    portrait: { slug: "fountain-portrait", alt: alt.fountainPortrait, position: "50% 60%" } satisfies SiteImage,
+    plaque: {
+      label: "Your date",
+      button: "Ask on WhatsApp",
+      message: "Hello, The Peacock Mansion. Is the house free on",
+      messageNoDate: "Hello, The Peacock Mansion. I would like to ask about the house for an event.",
+    },
     video: {
       mp4: "/media/video/hero.mp4",
       webm: "/media/video/hero.webm",
@@ -101,8 +105,7 @@ export const site = {
   },
 
   house: {
-    label: "I · The house",
-    heading: ["White marble,", "black lacquer,", "a little gold."],
+    heading: "White marble, black lacquer and a little gold.",
     lines: [
       "Behind the gates, a three-tier fountain, carved urns and peacocks that keep their own hours in the garden.",
       "Inside, a floating staircase rises beneath chandeliers to a gallery made for vows, portraits and long dinners.",
@@ -115,28 +118,25 @@ export const site = {
   },
 
   gallery: {
-    label: "II · Rooms and gardens",
-    heading: "Look around.",
-    hint: "Tap any photograph to open it.",
+    heading: "Rooms and gardens",
+    hint: "Tap a photograph to see it whole.",
     images: [
       { slug: "upper-gallery", alt: alt.upperGallery },
-      { slug: "bronze-relief", alt: alt.bronzeRelief },
+      { slug: "fountain-dusk", alt: alt.fountainDusk, position: "35% 55%" },
       { slug: "urns-night", alt: alt.urnsNight },
+      { slug: "bronze-relief", alt: alt.bronzeRelief, position: "50% 40%" },
+      { slug: "peacock-urn", alt: alt.peacockUrn, position: "50% 35%" },
       { slug: "salon-above", alt: alt.salonAbove },
       { slug: "arched-door", alt: alt.archedDoor },
-      { slug: "carved-nightstand", alt: alt.carvedNightstand },
-      { slug: "fountain-dusk", alt: alt.fountainDusk, position: "35% 50%" },
-      { slug: "peacock-urn", alt: alt.peacockUrn, position: "50% 30%" },
-      { slug: "peacock-emblem", alt: alt.peacockEmblem },
+      { slug: "carved-headboard", alt: alt.carvedHeadboard, position: "50% 35%" },
       { slug: "salon", alt: alt.salon },
-      { slug: "carved-headboard", alt: alt.carvedHeadboard },
-      { slug: "console-pair", alt: alt.consolePair },
+      { slug: "carved-nightstand", alt: alt.carvedNightstand },
+      { slug: "peacock-emblem", alt: alt.peacockEmblem },
     ] satisfies SiteImage[],
   },
 
   occasions: {
-    label: "III · Occasions",
-    heading: "Three ways to use the house.",
+    heading: "Three ways to use the house",
     items: [
       {
         numeral: "i",
@@ -147,7 +147,7 @@ export const site = {
       {
         numeral: "ii",
         title: "Traditional ceremonies",
-        line: "Space for both families, from the knocking to the final toast.",
+        line: "Room for both families, from the knocking to the final toast.",
         image: { slug: "dining-hall", alt: alt.diningHall },
       },
       {
@@ -160,9 +160,8 @@ export const site = {
   },
 
   film: {
-    label: "IV · On film",
-    heading: "The house, moving.",
-    note: "Posters are stills of the house. Films play from TikTok when tapped.",
+    heading: "The house on film",
+    note: "Each film plays from TikTok when you tap it. The frames show stills of the house.",
     playLabel: "Play",
     profileCta: "More on TikTok",
     films: [
@@ -170,7 +169,7 @@ export const site = {
         id: "7663946510849101078",
         title: "The fountain",
         length: "1:29",
-        poster: { slug: "fountain-portrait", alt: alt.fountainPortrait, position: "50% 50%" },
+        poster: { slug: "fountain-portrait", alt: alt.fountainPortrait, position: "50% 55%" },
       },
       {
         id: "7653055027111595286",
@@ -188,19 +187,18 @@ export const site = {
   },
 
   enquire: {
-    label: "V · Enquire",
     heading: "Tell us about your day.",
-    line: "Four questions, then the conversation moves to WhatsApp.",
-    image: { slug: "peacock-emblem", alt: alt.peacockEmblem } satisfies SiteImage,
+    line: "Four answers. We write the message, you press send.",
+    preview: "Your message",
     fields: {
       name: { label: "Your name", error: "Please tell us your name." },
-      date: { label: "Date", hint: "Leave blank if it is not fixed yet.", error: "Please choose a date from today onwards." },
+      date: { label: "Date", hint: "Leave it blank if the day is not fixed yet.", error: "Please choose a date from today onwards." },
       occasion: { label: "Occasion", placeholder: "Choose one", error: "Please choose an occasion." },
       guests: { label: "Guests", error: "Please enter a number of guests between 1 and 500." },
     },
     occasionOptions: ["Intimate wedding", "Traditional ceremony", "Photoshoot", "Private stay", "Something else"],
     submit: "Send on WhatsApp",
-    privacy: "Nothing is stored here. Your answers open in WhatsApp for you to send.",
+    privacy: "Nothing is stored here. The message opens in WhatsApp for you to send.",
     message: {
       greeting: "Hello, The Peacock Mansion. I would like to enquire.",
       name: "Name",
@@ -212,7 +210,6 @@ export const site = {
   },
 
   visit: {
-    label: "VI · Visit",
     heading: "Kumasi",
     lines: [
       "Ashanti Region, Ghana. A quiet, secure neighbourhood about twenty minutes by car from Kumasi International Airport.",

@@ -1,4 +1,4 @@
-// Loaded after hydration so Motion's animation engine stays off the critical path.
-import { domAnimation } from "motion/react";
+// Loaded only when the lightbox first opens.
+import { domMax } from "motion/react";
 
-export default domAnimation;
+export default domMax;

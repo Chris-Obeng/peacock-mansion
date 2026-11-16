@@ -59,3 +59,16 @@
 - Film: no TikTok requests before a tap; one player at a time.
 - Images: all AVIF, largest 112 KB (phone @3x hero).
 - Mobile Lighthouse (5 runs, warm): Performance 96, Accessibility 100, Best Practices 100, SEO 100. Cold first run after a fresh server start scores 89 because the image optimizer encodes the hero AVIF on first request.
+
+## v2: Boiserie redesign (owner feedback: v1 looked generic)
+
+- [x] Install design skills: Emil Kowalski (MIT), Anthropic `frontend-design` (Apache 2.0), Impeccable (Apache 2.0)
+- [x] Study live references: Airelles Le Grand Contrôle, Hôtel de Crillon, The Fife Arms, Terreno, Cliveden, Belmond Cipriani, Awwwards hotel category (principles only)
+- [x] PRODUCT.md (inferred from the brief), Impeccable concept roll, seven grounded directions, direction contract
+- [x] Fonts: Zodiak + Switzer, self-hosted via next/font/local
+- [x] Moulding system (Panel, Moulding, arch, plaque, field)
+- [x] Rebuild every section in the Boiserie world; hero date plaque as the working first-viewport action; live WhatsApp message preview
+- [x] Motion: gilt line draw, CSS scroll-driven drift; Motion only for the lightbox swipe
+- [x] OG image redrawn in the new world
+- [x] Verification: 11 viewports pass, 222 words, Lighthouse mobile 97/100/100/100, all images AVIF ≤ 139 KB, Impeccable detector clean
+- [x] DESIGN.md

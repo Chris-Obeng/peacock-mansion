@@ -1,128 +1,127 @@
 @import "tailwindcss";
 
-/* ───────────────────────── Tokens (from the photographs) ───────────────────────── */
+/* ───────── Boiserie: the house's own walls ─────────
+   plaster   cool white of the wall panels (not cream)
+   lacquer   the black doors
+   teal      the salon curtains and chandelier glass
+   gilt      gold leaf on mirrors, consoles and mouldings          */
 @theme {
-  --color-ivory: #f4efe6;
-  --color-stone: #e9e1d3;
-  --color-ink: #16140f;
-  --color-ink-soft: #57514a;
-  --color-gold: #a07f45;
-  --color-gold-text: #7a5c2a;
-  --color-gold-light: #c9a86a;
-  --color-teal: #0d3634;
-  --color-teal-deep: #082524;
-  --color-ivory-dim: #cfc8ba;
+  --color-plaster: #edeeea;
+  --color-plaster-deep: #e1e3de;
+  --color-lacquer: #0f1517;
+  --color-lacquer-2: #182023;
+  --color-teal: #0e3a3b;
+  --color-teal-deep: #0a2c2d;
+  --color-gilt: #a9884e;
+  --color-gilt-light: #cfb27a;
+  --color-gilt-text: #74582a;
+  --color-ink: #161b1c;
+  --color-ink-soft: #4e5654;
+  --color-ivory: #eeede6;
+  --color-mist: #aeb9b5;
 
-  --font-display: var(--font-bodoni), "Bodoni 72", "Didot", Georgia, serif;
-  --font-sans: var(--font-jost), "Futura", "Helvetica Neue", Arial, sans-serif;
+  --font-display: var(--font-zodiak), "Didot", "Bodoni 72", Georgia, serif;
+  --font-sans: var(--font-switzer), "Helvetica Neue", Arial, sans-serif;
 
-  /* Motion family (Emil Kowalski's strong curves). Never ease-in. */
+  /* One motion family (Emil Kowalski). Never ease-in. */
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
-  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
 
-  --breakpoint-xxs: 23rem;
   --breakpoint-xs: 25rem;
-  --breakpoint-3xl: 112rem;
 }
 
-/* ───────────────────────── Base / mobile platform layer ───────────────────────── */
 @layer base {
   html {
     -webkit-tap-highlight-color: transparent;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
+    background: var(--color-plaster);
     scroll-behavior: smooth;
-    background: var(--color-ink);
-    scroll-padding-top: 4.5rem;
+    scroll-padding-top: 5rem;
+    scrollbar-color: var(--color-gilt) var(--color-plaster-deep);
   }
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
     }
   }
-
   body {
-    background: var(--color-ivory);
+    background: var(--color-plaster);
     color: var(--color-ink);
     font-family: var(--font-sans);
     font-size: 1rem;
     line-height: 1.6;
     font-weight: 400;
+    font-feature-settings: "ss01";
     overflow-x: clip;
-    text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
-
   ::selection {
-    background: var(--color-gold-light);
-    color: var(--color-ink);
+    background: var(--color-teal);
+    color: var(--color-ivory);
   }
-
   a,
   button,
+  label,
+  select,
   summary,
   [role="button"],
-  label,
-  select {
+  [role="tab"] {
     touch-action: manipulation;
   }
-
   button,
-  [role="button"] {
+  [role="button"],
+  [role="tab"] {
     -webkit-user-select: none;
     user-select: none;
     cursor: pointer;
   }
-
   input,
   select,
   textarea {
-    font-size: 16px; /* prevents iOS zoom on focus */
+    font-size: 16px;
+    caret-color: var(--color-gilt-light);
   }
-
   :focus-visible {
-    outline: 2px solid var(--color-gold);
-    outline-offset: 3px;
+    outline: 1.5px solid var(--color-gilt);
+    outline-offset: 4px;
   }
-
   img {
     -webkit-touch-callout: none;
   }
+  a {
+    text-underline-offset: 0.28em;
+    text-decoration-thickness: 1px;
+  }
 }
 
-/* ───────────────────────── Type helpers ───────────────────────── */
+/* ───────── Type ───────── */
 @utility font-display {
   font-family: var(--font-display);
-  font-optical-sizing: auto;
-  font-weight: 400;
-  letter-spacing: -0.015em;
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  font-kerning: normal;
 }
-
-/* The italic cut is a separate, non-preloaded family. */
-.font-display.italic,
 .font-display em,
-.font-display .italic {
-  font-family: var(--font-bodoni-italic), var(--font-bodoni), "Bodoni 72", "Didot", Georgia, serif;
+.font-display .italic,
+em.font-display,
+.font-display.italic {
+  font-family: var(--font-zodiak-italic), var(--font-zodiak), Georgia, serif;
   font-style: italic;
 }
-
-@utility label {
-  font-family: var(--font-sans);
-  font-size: 0.6875rem;
-  line-height: 1.2;
-  font-weight: 500;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
+@utility inscription {
+  font-family: var(--font-display);
+  font-weight: 250;
+  letter-spacing: -0.02em;
+  line-height: 0.92;
+  text-wrap: balance;
+}
+@utility num {
+  font-variant-numeric: tabular-nums lining-nums;
 }
 
-@utility hairline {
-  height: 1px;
-  background: currentColor;
-  opacity: 0.35;
-}
-
+/* ───────── Controls ───────── */
 @utility press {
   transition:
     transform 140ms var(--ease-out),
@@ -140,122 +139,78 @@
     padding-inline: max(2.5rem, env(safe-area-inset-left), env(safe-area-inset-right));
   }
   @media (width >= 80rem) {
-    padding-inline: 4rem;
+    padding-inline: 4.5rem;
   }
 }
 
-/* ───────────────────────── Hero signature: the arch opens ───────────────────────── */
-@keyframes arch-open {
-  from {
-    clip-path: inset(14% 20% 0% 20% round 50vmax 50vmax 0 0);
-  }
-  to {
-    clip-path: inset(0% 0% 0% 0% round 0 0 0 0);
+/* ───────── The moulding: Louis XV panel with concave corners ─────────
+   The photograph is cut with four concave corners; the gilt line is drawn
+   by <Moulding>, concentric with those corners.                            */
+.notched {
+  --r: 14px;
+  -webkit-mask:
+    radial-gradient(circle at 0 0, #0000 var(--r), #000 calc(var(--r) + 0.5px)) top left / 51% 51% no-repeat,
+    radial-gradient(circle at 100% 0, #0000 var(--r), #000 calc(var(--r) + 0.5px)) top right / 51% 51% no-repeat,
+    radial-gradient(circle at 0 100%, #0000 var(--r), #000 calc(var(--r) + 0.5px)) bottom left / 51% 51% no-repeat,
+    radial-gradient(circle at 100% 100%, #0000 var(--r), #000 calc(var(--r) + 0.5px)) bottom right / 51% 51% no-repeat;
+  mask:
+    radial-gradient(circle at 0 0, #0000 var(--r), #000 calc(var(--r) + 0.5px)) top left / 51% 51% no-repeat,
+    radial-gradient(circle at 100% 0, #0000 var(--r), #000 calc(var(--r) + 0.5px)) top right / 51% 51% no-repeat,
+    radial-gradient(circle at 0 100%, #0000 var(--r), #000 calc(var(--r) + 0.5px)) bottom left / 51% 51% no-repeat,
+    radial-gradient(circle at 100% 100%, #0000 var(--r), #000 calc(var(--r) + 0.5px)) bottom right / 51% 51% no-repeat;
+}
+.arched {
+  border-radius: 999px 999px 0 0;
+}
+
+/* The gilt line draws itself once, around the frame, when it comes into view. */
+.moulding path {
+  fill: none;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  vector-effect: non-scaling-stroke;
+  transition: stroke-dashoffset var(--draw, 1500ms) var(--ease-in-out);
+}
+.moulding path + path {
+  transition-delay: 140ms;
+}
+.moulding[data-drawn="true"] path {
+  stroke-dashoffset: 0;
+}
+.moulding[data-closed="false"] path:last-child {
+  stroke-dashoffset: 1;
+}
+.moulding[data-closed] path:last-child {
+  transition-duration: 700ms;
+  transition-delay: 0ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  .moulding path {
+    transition: none;
+    stroke-dashoffset: 0;
   }
 }
-@keyframes arch-open-portrait {
-  from {
-    clip-path: inset(16% 9% 0% 9% round 50vmax 50vmax 0 0);
-  }
-  to {
-    clip-path: inset(0% 0% 0% 0% round 0 0 0 0);
-  }
-}
-@keyframes settle {
-  from {
-    transform: scale(1.14);
-  }
-  to {
-    transform: scale(1.04);
+
+/* Gentle drift of the photograph inside its frame, scroll-driven, no JavaScript. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .drift {
+      animation: drift linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 100%;
+    }
   }
 }
 @keyframes drift {
   from {
-    transform: scale(1.04);
+    transform: translate3d(0, -4%, 0) scale(1.1);
   }
   to {
-    transform: scale(1);
-  }
-}
-@keyframes rise {
-  from {
-    transform: translateY(105%);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-@keyframes fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-@keyframes draw-down {
-  from {
-    transform: scaleY(0);
-  }
-  to {
-    transform: scaleY(1);
-  }
-}
-@keyframes fade {
-  from {
-    opacity: 0;
+    transform: translate3d(0, 4%, 0) scale(1.1);
   }
 }
 
-.hero-arch {
-  animation: arch-open-portrait 1600ms var(--ease-in-out) both;
-}
-@media (orientation: landscape) {
-  .hero-arch {
-    animation-name: arch-open;
-  }
-}
-.hero-settle {
-  animation:
-    settle 1600ms var(--ease-out) both,
-    drift 24s 1600ms var(--ease-out) both;
-}
-.hero-line {
-  display: block;
-  animation: rise 1100ms var(--ease-out) both;
-  animation-delay: var(--d, 0ms);
-}
-.hero-fade {
-  animation: fade-up 700ms var(--ease-out) both;
-  animation-delay: var(--d, 900ms);
-}
-.hero-draw {
-  transform-origin: top;
-  animation: draw-down 900ms 1400ms var(--ease-out) both;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-arch,
-  .hero-settle,
-  .hero-line,
-  .hero-draw {
-    animation: none;
-  }
-  .hero-fade {
-    animation: fade 400ms ease both;
-  }
-}
-
-/* Short landscape phones: keep the hero to one calm screen */
-@media (orientation: landscape) and (max-height: 500px) {
-  .hero-line-copy {
-    display: none;
-  }
-}
-
-/* Hero video fades over the still once it can play */
+/* Hero film fades over the still once it can play. */
 .hero-video {
   opacity: 0;
   transition: opacity 1200ms var(--ease-out);
@@ -264,24 +219,46 @@
   opacity: 1;
 }
 
-/* Below-the-fold sections skip rendering work until near the viewport */
-.cv-auto {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 900px;
+/* Hero plaque settles in after the frame starts drawing. */
+@keyframes settle-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+}
+.settle {
+  animation: settle-in 900ms 500ms var(--ease-out) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .settle {
+    animation: none;
+  }
 }
 
-/* Film track: native scroll physics */
+/* Occasions: content swaps inside one fixed frame. */
+.swap {
+  transition: opacity 420ms ease;
+}
+.swap[data-active="false"] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 1000px;
+}
+
 .snap-track {
   scroll-snap-type: x mandatory;
   overscroll-behavior-x: contain;
   scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
 }
 .snap-track::-webkit-scrollbar {
   display: none;
 }
 
-/* Lightbox (native <dialog>) */
+/* ───────── Lightbox (native <dialog>) ───────── */
 dialog.lightbox {
   width: 100vw;
   max-width: 100vw;
@@ -290,21 +267,26 @@ dialog.lightbox {
   margin: 0;
   padding: 0;
   border: 0;
-  background: var(--color-ink);
+  background: var(--color-lacquer);
   color: var(--color-ivory);
   overflow: hidden;
   overscroll-behavior: contain;
 }
 dialog.lightbox::backdrop {
-  background: var(--color-ink);
+  background: var(--color-lacquer);
 }
 dialog.lightbox[open] {
-  animation: lb-in 240ms var(--ease-out) both;
+  animation: lb-in 260ms var(--ease-out) both;
 }
 @keyframes lb-in {
   from {
     opacity: 0;
-    transform: scale(0.97);
+    transform: scale(0.98);
+  }
+}
+@keyframes fade {
+  from {
+    opacity: 0;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -313,45 +295,46 @@ dialog.lightbox[open] {
   }
 }
 
-/* Form controls on teal */
+/* ───────── Fields on teal ───────── */
 .field {
   width: 100%;
-  min-height: 3rem;
+  min-height: 3.25rem;
   background: transparent;
   border: 0;
-  border-bottom: 1px solid rgb(244 239 230 / 0.45);
   border-radius: 0;
   color: var(--color-ivory);
-  padding: 0.625rem 0;
+  padding: 0.75rem 1.125rem;
   font-family: var(--font-sans);
   appearance: none;
-  transition: border-color 300ms ease;
 }
 .field:focus {
   outline: none;
-  border-bottom-color: var(--color-gold-light);
 }
-.field:focus-visible {
-  outline: 2px solid var(--color-gold-light);
-  outline-offset: 4px;
-}
-.field[aria-invalid="true"] {
-  border-bottom-color: #f2b8a8;
+.field::placeholder {
+  color: rgb(174 185 181 / 0.75);
 }
 .field::-webkit-calendar-picker-indicator {
-  filter: invert(0.9) sepia(0.3);
-  opacity: 0.8;
+  filter: invert(0.85) sepia(0.5) hue-rotate(5deg);
+  opacity: 0.85;
+  cursor: pointer;
+}
+.field-wrap:focus-within .moulding path {
+  stroke: var(--color-gilt-light);
+}
+.field-wrap:focus-within {
+  background: rgb(255 255 255 / 0.04);
 }
 select.field {
-  background-image: linear-gradient(45deg, transparent 50%, var(--color-gold-light) 50%),
-    linear-gradient(135deg, var(--color-gold-light) 50%, transparent 50%);
+  padding-right: 2.5rem;
+  background-image: linear-gradient(45deg, transparent 50%, var(--color-gilt-light) 50%),
+    linear-gradient(135deg, var(--color-gilt-light) 50%, transparent 50%);
   background-position:
-    calc(100% - 10px) 55%,
-    calc(100% - 5px) 55%;
+    calc(100% - 22px) 55%,
+    calc(100% - 17px) 55%;
   background-size: 5px 5px;
   background-repeat: no-repeat;
 }
 select.field option {
   color: var(--color-ink);
-  background: var(--color-ivory);
+  background: var(--color-plaster);
 }

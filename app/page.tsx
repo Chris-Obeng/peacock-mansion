@@ -45,7 +45,7 @@ export default function Page() {
     <>
       <a
         href="#main"
-        className="label fixed left-4 top-4 z-50 -translate-y-24 bg-ivory px-4 py-3 text-ink focus:translate-y-[env(safe-area-inset-top)]"
+        className="fixed left-4 top-4 z-50 -translate-y-24 bg-lacquer px-4 py-3 text-[0.9375rem] text-ivory focus:translate-y-[env(safe-area-inset-top)]"
       >
         {site.skipLink}
       </a>

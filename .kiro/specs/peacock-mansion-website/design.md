@@ -1,5 +1,8 @@
 # Design: The Peacock Mansion website
 
+> **v2 (16 Nov 2026): the visual system below was replaced.** The owner rejected v1 as generic. v2 is the "Boiserie" direction: the page as the house's own panelled wall, photographs hung in Louis XV mouldings, Zodiak + Switzer, plaster/lacquer/teal/gilt. The built system is documented in [`DESIGN.md`](../../../DESIGN.md), the direction contract in `.impeccable/surfaces/app-page-tsx.md`, product truth in [`PRODUCT.md`](../../../PRODUCT.md). Sections below on data model, media pipeline, SEO, performance and testing still apply; sections on palette, type, layout and motion describe v1 and are kept for history.
+
+
 ## Thesis
 
 An illustrated monograph of a white-marble house. Ivory pages, deep ink, a thread of gold leaf, one note of peacock teal from the salon curtains and chandelier glass. Photographs lead; text whispers. One action everywhere: talk to the house on WhatsApp. (Full reasoning in `RESEARCH.md`.)
