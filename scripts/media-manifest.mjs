@@ -1,112 +1,76 @@
-// Single source of truth for which listing photos the site uses, where they came from,
-// and how they are cropped. Read by fetch-media.mjs, process-images.mjs and MEDIA_SOURCES.md.
-// Status of every entry: placeholder, pending owner's original.
+// v3: every photograph on the site, picked by hand from the owner's folder
+// (media-source/images) and from frames of the owner's films (media-source/videos).
+// Crops are fractions of the source. `credit` names the studio whose mark was
+// cropped out of the frame, so the site can credit them instead.
 
-const L1 = "https://www.airbnb.com/rooms/47817091";
-const L2 = "https://www.airbnb.com/rooms/47822494";
-const raw = (u) => u.replace("/im/pictures/", "/pictures/"); // full-resolution original
+const I = (f) => ({ file: `media-source/images/${f}` });
+const V = (id, t, crop) => ({ video: id, t, crop });
+const K = "7646124566938504470"; // A King and his Queen in beautiful kente
+const O = "7700613218561068311"; // Another Peacock Mansion love story (Okatakyie)
+// Active picture of the two landscape films, without the letterbox bars.
+const LB = { left: 0, top: 108 / 1080, width: 1, height: 864 / 1080 };
+// A 4:5 portrait cut from a letterboxed landscape frame, centred at x.
+const portrait = (x) => {
+  const w = (864 * 0.8) / 1920;
+  return { left: Math.max(0, Math.min(1 - w, x - w / 2)), top: 108 / 1080, width: w, height: 864 / 1080 };
+};
 
-/** @typedef {{left:number, top:number, width:number, height:number}} Crop  fractions of the source */
-/** @type {{slug:string, listing:string, source:string, crop?:Crop, from?:string, reason:string}[]} */
+/** @type {{slug:string, crop?:{left:number,top:number,width:number,height:number}, credit?:string, file?:string, video?:string, t?:number}[]} */
 export const manifest = [
-  {
-    slug: "fountain-dusk",
-    listing: L2,
-    source: raw("https://a0.muscache.com/im/pictures/miso/Hosting-47822494/original/09ea5ba4-5750-4561-842c-4f1061f3a15a.jpeg"),
-    reason: "The three-tier fountain at dusk with the jets running and the lit façade behind. The single strongest image of the house; matches the top TikTok video. Hero and Open Graph image.",
-  },
-  {
-    slug: "fountain-portrait",
-    listing: L2,
-    from: "fountain-dusk",
-    source: raw("https://a0.muscache.com/im/pictures/miso/Hosting-47822494/original/09ea5ba4-5750-4561-842c-4f1061f3a15a.jpeg"),
-    crop: { left: 0.06, top: 0, width: 0.54, height: 1 },
-    reason: "Portrait crop of the same frame, centred on the fountain, for the first film poster.",
-  },
-  {
-    slug: "salon",
-    listing: L2,
-    source: raw("https://a0.muscache.com/im/pictures/hosting/Hosting-47822494/original/49923ff1-ccd4-42f6-8de9-5f2f8cfe7116.jpeg"),
-    reason: "Main salon: tufted blush sofa, marble table, staircase and arched doors behind. Shows scale and the Rococo furniture in one frame.",
-  },
-  {
-    slug: "statue-gallery",
-    listing: L2,
-    source: raw("https://a0.muscache.com/im/pictures/hosting/Hosting-47822494/original/85be4e0a-ab4b-4c73-bae0-e18a99edd31f.jpeg"),
-    reason: "Marble figure on the upper gallery under two chandeliers. Symmetrical, bright, reads as a ceremony space.",
-  },
-  {
-    slug: "upper-gallery",
-    listing: L2,
-    source: raw("https://a0.muscache.com/im/pictures/hosting/Hosting-47822494/original/36755757-53db-4edd-8772-5c9b35582024.jpeg"),
-    reason: "The gallery landing with the teal-glass chandelier, plaster rose and arched black door. Source of the teal in the palette.",
-  },
-  {
-    slug: "peacock-urn",
-    listing: L2,
-    source: raw("https://a0.muscache.com/im/pictures/hosting/Hosting-47822494/original/8edeca1f-4288-4eef-b487-7089bcd06a52.jpeg"),
-    crop: { left: 0, top: 0.22, width: 1, height: 0.78 },
-    reason: "A peacock perched on a carved garden urn beside an iron lantern post. Proves the name. Cropped to remove a satellite dish at the top.",
-  },
-  {
-    slug: "urns-night",
-    listing: L2,
-    source: raw("https://a0.muscache.com/im/pictures/hosting/Hosting-47822494/original/ff53beba-d51a-41ba-a63a-b14a9f564dc8.jpeg"),
-    reason: "Row of lit urns along the boundary wall at night. Strong vertical rhythm and contrast for the editorial layout.",
-  },
-  {
-    slug: "gilt-mirror",
-    listing: L2,
-    source: raw("https://a0.muscache.com/im/pictures/miso/Hosting-47822494/original/d339bf1a-c529-42d1-9ec3-ac2670b9266d.jpeg"),
-    reason: "Gilt Rococo mirror and console with bronze figures. Gold-leaf reference for the palette; the backdrop bridal portraits use most.",
-  },
-  {
-    slug: "bronze-relief",
-    listing: L2,
-    source: raw("https://a0.muscache.com/im/pictures/hosting/Hosting-47822494/original/17f51418-eb30-4972-b862-6b73657ba92a.jpeg"),
-    reason: "African bronze figure beneath a classical plaster medallion. Shows the African and European mix the owner describes.",
-  },
-  {
-    slug: "carved-headboard",
-    listing: L2,
-    source: raw("https://a0.muscache.com/im/pictures/hosting/Hosting-47822494/original/452acec7-f503-4240-a060-64b0010e5208.jpeg"),
-    reason: "Close view of a carved headboard with gold-embroidered pillows. The stay, told through detail rather than a bedroom count.",
-  },
-  {
-    slug: "carved-nightstand",
-    listing: L2,
-    source: raw("https://a0.muscache.com/im/pictures/hosting/Hosting-47822494/original/605b488b-4159-4016-a7ce-9b9c3b404024.jpeg"),
-    reason: "Carved bedside cabinet with rose garlands. Texture and craft at small size.",
-  },
-  {
-    slug: "dining-hall",
-    listing: L2,
-    source: raw("https://a0.muscache.com/im/pictures/hosting/Hosting-47822494/original/f4636ee7-f6be-4a11-b894-5c1b1b66ea01.jpeg"),
-    reason: "Gilt dining set on marble with the staircase and fireplace beyond. Suits family gatherings and traditional ceremonies.",
-  },
-  {
-    slug: "salon-above",
-    listing: L2,
-    source: raw("https://a0.muscache.com/im/pictures/hosting/Hosting-47822494/original/a754152e-7a17-47d5-bbfe-ed667599ab6f.jpeg"),
-    reason: "The double-height salon seen from the gallery, with the peacock plaster relief. Shows ceiling height and the bridal-film setting.",
-  },
-  {
-    slug: "arched-door",
-    listing: L1,
-    source: raw("https://a0.muscache.com/im/pictures/hosting/Hosting-47817091/original/72a2661e-b896-4899-809a-244cfb492ff6.jpeg"),
-    reason: "Arched black-lacquer door in white plaster. Source of the hero's arch reveal; used in Visit.",
-  },
-  {
-    slug: "console-pair",
-    listing: L1,
-    source: raw("https://a0.muscache.com/im/pictures/hosting/Hosting-47817091/original/e5f31067-6901-4ee1-809b-240e0ca15fbf.jpeg"),
-    reason: "Carved console between two gilt chairs under a cherub mirror. Calm, symmetrical portrait backdrop.",
-  },
-  {
-    slug: "peacock-emblem",
-    listing: L2,
-    source: raw("https://a0.muscache.com/im/pictures/hosting/Hosting-47822494/original/0153824f-3ad2-4644-b2f7-494833f2f4e0.jpeg"),
-    crop: { left: 0.18, top: 0.12, width: 0.64, height: 0.76 },
-    reason: "The house's own gold peacock-fan emblem embroidered on linen. Inspired the site ornament; used beside the enquiry form.",
-  },
+  // Hero posters: the first frame of the hero reel, so the film fades in without a jump.
+  { slug: "hero-wide", ...V(K, 7.55, LB) },
+  { slug: "hero-tall", ...V(K, 7.55, { left: 0.6 - 486 / 1920 / 2, top: 108 / 1080, width: 486 / 1920, height: 864 / 1080 }) },
+
+  // Weddings
+  { slug: "lantern-couple", ...I("261a7781-aea0-4ca1-8534-8045de141ec1.avif") },
+  { slug: "lantern-bride", ...I("3e641f6f-4173-4a6f-a3e3-360ca1c80596.jpeg") },
+  { slug: "lantern-couple-full", ...I("c85213d9-65a3-4136-8023-969e141e31bd.avif") },
+  { slug: "statues-bride", ...I("9393eb70-0fd9-4c82-aa5a-928d1d849509.avif") },
+  { slug: "vintage-car", ...I("2a231e48-4007-4595-9d2f-62a81b9b61b6.avif") },
+  { slug: "veil-flight", ...I("Screenshot 2026-11-16 143641.png"), crop: { left: 0.012, top: 0.01, width: 0.976, height: 0.98 } },
+  { slug: "bridesmaids", ...I("Screenshot 2026-11-16 144201.png"), crop: { left: 0.012, top: 0.012, width: 0.976, height: 0.85 } },
+  { slug: "mirror-couple", ...I("Screenshot 2026-11-16 144234.png"), crop: { left: 0.012, top: 0.012, width: 0.976, height: 0.976 } },
+  { slug: "veil-kiss", ...I("Screenshot 2026-11-16 144944.png"), crop: { left: 0, top: 0, width: 1, height: 0.86 } },
+  { slug: "veil-profile", ...I("Screenshot 2026-11-16 144858.png"), crop: { left: 0, top: 0, width: 1, height: 0.87 } },
+  { slug: "balcony-bride", ...I("Screenshot 2026-11-16 145100.png"), crop: { left: 0, top: 0, width: 1, height: 0.86 } },
+  { slug: "balcony-couple", ...I("Screenshot 2026-11-16 145132.png") },
+  { slug: "piano-couple", ...I("922681612.jpg") },
+  { slug: "groomsmen", ...I("ec5ab309-7ad2-4187-986f-0e65b1579d22.jpeg") },
+  { slug: "garden-dinner", ...I("bf59f5d1-ad8b-4a51-95dd-a34db90392c8.avif") },
+
+  // Traditional ceremonies
+  { slug: "kente-men", ...I("5441a711-a1ac-4083-babf-0653ee272440.avif"), crop: { left: 0.02, top: 0.016, width: 0.96, height: 0.968 } },
+  { slug: "kente-bride", ...V(K, 7.3, portrait(0.6)) },
+  { slug: "kente-embrace", ...V(K, 8.6, portrait(0.72)) },
+  { slug: "drummers", ...V(K, 13.2, LB) },
+
+  // Portraits and fashion
+  { slug: "white-corset", ...I("Screenshot 2026-11-16 145848.png"), crop: { left: 0.01, top: 0.012, width: 0.98, height: 0.93 }, credit: "HenryGenesiz Studios" },
+  { slug: "mermaid-train", ...I("Screenshot 2026-11-16 145800.png"), crop: { left: 0, top: 0, width: 1, height: 0.88 }, credit: "HenryGenesiz Studios" },
+  { slug: "blue-tulle", ...I("Screenshot 2026-11-16 145902.png"), crop: { left: 0.01, top: 0.012, width: 0.98, height: 0.88 }, credit: "HenryGenesiz Studios" },
+  { slug: "sequin-fan", ...I("Screenshot 2026-11-16 145402.png"), crop: { left: 0, top: 0, width: 1, height: 0.9 }, credit: "Bangscoe Visuals" },
+  { slug: "stair-overhead", ...I("Screenshot 2026-11-16 145431.png"), crop: { left: 0, top: 0, width: 1, height: 0.9 }, credit: "Bangscoe Visuals" },
+  { slug: "stair-gold", ...I("Screenshot 2026-11-16 145447.png"), crop: { left: 0, top: 0.02, width: 1, height: 0.86 }, credit: "Bangscoe Visuals" },
+  { slug: "lace-back", ...I("Screenshot 2026-11-16 144614.png") },
+  { slug: "ombre-gown", ...I("816360301.jpg") },
+
+  // The house
+  { slug: "aerial-fountain", ...V(O, 2.75, LB) },
+  { slug: "facade-below", ...V(K, 0.6, LB) },
+  { slug: "floating-stair", ...I("498755341.jpg") },
+  { slug: "night-facade", ...I("475583004.jpg") },
+  { slug: "fountain-dusk", ...I("475582867.jpg") },
+  { slug: "bust", ...I("ff7e4690-76f3-4c54-b867-308a975edb46.avif") },
+  { slug: "salon-couple", ...V(O, 3.85, LB) },
+
+  // Film posters (portrait stills from each film)
+  { slug: "film-1078", ...V("7663946510849101078", 0.3, { left: 0, top: 0.15, width: 1, height: 0.703 }) },
+  { slug: "film-4470", ...V(K, 7.0, portrait(0.6)) },
+  { slug: "film-8311", ...V(O, 45, portrait(0.57)) },
+  { slug: "film-0070", ...V("7687533660697890070", 40, { left: 0, top: 0.14, width: 1, height: 0.703 }) },
+  { slug: "film-8742", ...V("7698813625812798742", 50.5, { left: 0.62 - 0.2 / 2 - 0.1, top: 52 / 1080, width: 0.4, height: 976 / 1080 }) },
+  { slug: "film-5286", ...V("7653055027111595286", 0.3, { left: 0.3, top: 0, width: 0.4, height: 1 }) },
+  { slug: "film-3606", ...V("7646064036861283606", 46, { left: 0, top: 0.15, width: 1, height: 0.703 }) },
+  { slug: "film-0150", ...V("7695003263481040150", 33, { left: 0.35, top: 0, width: 0.4, height: 1 }) },
+  { slug: "facade-aerial", ...V("7698813625812798742", 44, { left: 0, top: 52 / 1080, width: 1, height: 976 / 1080 }) },
 ];

@@ -4,9 +4,9 @@ import { site } from "@/content/site";
 import { useIdInView } from "@/lib/useInView";
 
 /** Phones only. Hidden while the hero, with its own date plaque, is on screen. */
-export function MobileBar() {
-  const overHero = useIdInView("top", "0px 0px -40% 0px");
-  const shown = !overHero;
+export function MobileBar({ alwaysShown = false }: { alwaysShown?: boolean }) {
+  const overHero = useIdInView("top", "0px 0px -40% 0px", !alwaysShown);
+  const shown = alwaysShown || !overHero;
   return (
     <div
       className={`fixed inset-x-0 bottom-0 z-40 bg-lacquer pb-[env(safe-area-inset-bottom)] shadow-[0_-1px_0_rgb(207_178_122/0.5)] transition-transform duration-[400ms] ease-[var(--ease-out)] md:hidden ${
@@ -15,7 +15,7 @@ export function MobileBar() {
       inert={!shown}
     >
       <a
-        href={site.contact.whatsappUrl}
+        href={site.contact.checkDateUrl}
         target="_blank"
         rel="noopener noreferrer"
         className="press flex min-h-14 items-center justify-center gap-3 px-6 text-[1rem] text-ivory"

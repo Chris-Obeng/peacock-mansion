@@ -210,6 +210,32 @@ em.font-display,
   }
 }
 
+/* Hero: the still breathes in, the words rise once after the frame starts drawing. */
+@keyframes still-in {
+  from {
+    transform: scale(1.08);
+  }
+}
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+  }
+}
+.hero-still {
+  animation: still-in 9s var(--ease-out) both;
+}
+.hero-rise {
+  animation: rise-in 1100ms var(--ease-out) both;
+  animation-delay: calc(500ms + var(--d, 0ms));
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-still,
+  .hero-rise {
+    animation: none;
+  }
+}
+
 /* Hero film fades over the still once it can play. */
 .hero-video {
   opacity: 0;

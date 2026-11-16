@@ -20,7 +20,7 @@ Turn interest from TikTok and the rental listings into qualified WhatsApp enquir
 
 ## Positioning
 
-A private French Rococo-style house in a quiet part of Kumasi: three-tier shell fountain, carved urns, marble statues, chandeliers, a floating staircase, gilt mirrors, and peacocks that live in the garden. Small, private and photogenic, rather than a banquet hall.
+A private French Rococo-style house in a quiet part of Kumasi: three-tier shell fountain, carved urns, marble statues, chandeliers, a floating staircase, gilt mirrors, and peacocks that live in the garden. Private and photogenic: the whole house is the venue, rather than one hall among many.
 
 ## Operating Context
 
@@ -29,7 +29,8 @@ Discovery happens on TikTok (17.2K followers; best content is bridal and fountai
 ## Capabilities and Constraints
 
 - One page, sections in this order: hero, the house, gallery, occasions, film, enquire, visit. Sticky WhatsApp bar on phones.
-- Navigation: logo, three anchors, one WhatsApp button. Minimal footer. Visible copy under ~250 words.
+- Navigation: logo, three links, one WhatsApp button. Minimal footer. At most three pages (v3: home and gallery).
+- Never describe the events as "small".
 - Stack is fixed by the brief: Next.js App Router, TypeScript, Tailwind, Motion, next/image, next/font, sharp.
 - *Open:* bedroom count (4 vs 5 across listings), event capacity, exact address, prices. No swimming pool exists in any source.
 
@@ -42,7 +43,7 @@ Discovery happens on TikTok (17.2K followers; best content is bridal and fountai
 
 ## Evidence on Hand
 
-16 host listing photographs in `public/media/images` (placeholders pending the owner's originals; see MEDIA_SOURCES.md). Three TikTok films by ID. No testimonials, press, prices or capacity may be invented.
+The owner's own wedding photography and 22 films in `media-source/` (see MEDIA_SOURCES.md). Hero reel cut from two of the films, hosted on ImageKit. TikTok 17.2K followers; top film 230.4K views; Airbnb 5.0; one Booking.com guest review quoted with attribution. No testimonials, press, prices or capacity may be invented.
 
 ## Product Principles
 

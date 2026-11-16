@@ -90,3 +90,11 @@ What carried into v2:
 - Crillon and Airelles set the name as a quiet, wide serif inscription with plenty of air.
 
 Revised thesis: the site is the house's own panelled wall. Every photograph hangs in a Louis XV moulding with concave corners and a gilt line that draws itself as you arrive, on cool plaster white (the real walls), with black lacquer from the doors and teal from the salon curtains.
+
+## v3 addendum: proof used on the site (checked 16 Nov 2026)
+
+- TikTok @peacockmansion: 17.2K followers (shown as "17,000"); most-watched film 7663946510849101078 at 230.4K views (shown as "230K"). Source: TikTok's official creator embed.
+- Airbnb: both listings rated 5.0 (18 and 14 reviews).
+- Booking.com guest review quoted with attribution: Chrissy, United States. Shortened with an ellipsis; no words changed except capitalisation.
+- Practical facts in the FAQ come from Airbnb listing 47817091: en-suite bedrooms with Jacuzzis and air-conditioning; separate charges for bridal events, photography and videography; caterer on standby priced by menu; rate card by guest count; ~20 min to Kumasi International Airport and ~10 min to Santasi Roundabout; car-hire partner for group vans; CCTV and electric fencing.
+These numbers change; update `content/site.ts` when they do.
