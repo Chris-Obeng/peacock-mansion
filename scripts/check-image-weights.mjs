@@ -18,7 +18,7 @@ for (const d of devices) {
   const page = await ctx.newPage();
   const sizes = [];
   page.on("response", async (res) => {
-    if (res.request().resourceType() !== "image" || res.url().startsWith("data:")) return;
+    if (!["image", "media"].includes(res.request().resourceType()) || res.url().startsWith("data:") || res.url().endsWith(".mp4") || res.url().includes(".mp4?")) return;
     try {
       const body = await res.body();
       sizes.push({ url: decodeURIComponent(res.url().replace(BASE, "")), bytes: body.length, type: res.headers()["content-type"] });
@@ -30,7 +30,12 @@ for (const d of devices) {
     await page.evaluate((yy) => window.scrollTo(0, yy), y);
     await page.waitForTimeout(80);
   }
-  await page.locator("#gallery li button").first().click();
+  await page.goto(BASE + "/gallery", { waitUntil: "networkidle" });
+  for (let y = 0; y < 9000; y += 600) {
+    await page.evaluate((yy) => window.scrollTo(0, yy), y);
+    await page.waitForTimeout(60);
+  }
+  await page.locator("main li button").first().click();
   await page.waitForTimeout(800);
   await page.keyboard.press("ArrowRight");
   await page.waitForLoadState("networkidle");

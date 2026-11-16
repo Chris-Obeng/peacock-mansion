@@ -44,14 +44,8 @@ export function Visit() {
             </ul>
           </address>
         </div>
-        <div className="md:col-span-4 md:col-start-9 md:self-end">
-          <Panel
-            image={image}
-            shape="arch"
-            mat={12}
-            sizes="(min-width: 768px) 32vw, 80vw"
-            className="mx-auto aspect-[3/4.4] w-[80%] max-w-sm md:w-full"
-          />
+        <div className="md:col-span-5 md:col-start-8 md:self-end">
+          <Panel image={image} mat={10} radius={14} sizes="(min-width: 768px) 32vw, 100vw" className="aspect-[4/3] w-full" />
         </div>
       </div>
     </section>

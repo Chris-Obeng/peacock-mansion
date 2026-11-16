@@ -72,3 +72,11 @@
 - [x] OG image redrawn in the new world
 - [x] Verification: 11 viewports pass, 222 words, Lighthouse mobile 97/100/100/100, all images AVIF ≤ 139 KB, Impeccable detector clean
 - [x] DESIGN.md
+
+## v3: the owner's own media and conversion copy
+
+- [x] Hero reel cut from the two films the owner chose (wide + tall), hosted on ImageKit with orig-true delivery
+- [x] 37 photographs hand-picked from the owner's folder plus film stills; studio credits kept
+- [x] Two pages: home and /gallery (filters, masonry, lightbox)
+- [x] Conversion copy: value proposition, four reasons, occasion-specific WhatsApp prompts, proof, steps, FAQ, enquiry form; "small" removed
+- [x] Checks: 11 viewports + gallery pass, lightbox/form/film tests pass, Lighthouse mobile 100/100/100/100, images AVIF ≤ 91 KB, Impeccable detector clean

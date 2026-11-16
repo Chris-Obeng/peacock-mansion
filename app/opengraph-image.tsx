@@ -2,9 +2,8 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import { ImageResponse } from "next/og";
 import sharp from "sharp";
-import { site } from "@/content/site";
 
-export const alt = "The Peacock Mansion, Kumasi: the three-tier fountain at dusk hung in a gilt-moulded panel.";
+export const alt = "The Peacock Mansion, Kumasi: a bride and groom by the iron lanterns on the porch, framed in a gilt moulding.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -20,8 +19,8 @@ export default async function OpengraphImage() {
   const R = 26;
   const mask = Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}"><path d="${panel(0, 0, W, H, R)}" fill="#fff"/></svg>`);
   const [photo, light, italic, sans] = await Promise.all([
-    sharp(path.join(root, "public/media/images/fountain-dusk.jpg"))
-      .resize(W, H, { fit: "cover", position: "left" })
+    sharp(path.join(root, "public/media/images/lantern-couple.jpg"))
+      .resize(W, H, { fit: "cover", position: "attention" })
       .composite([{ input: mask, blend: "dest-in" }])
       .png()
       .toBuffer(),
@@ -45,7 +44,7 @@ export default async function OpengraphImage() {
           <div style={{ fontFamily: "Zodiak", fontSize: 92, lineHeight: 0.95, letterSpacing: -2, display: "flex" }}>The Peacock</div>
           <div style={{ fontFamily: "Zodiak", fontStyle: "italic", fontSize: 92, lineHeight: 0.95, letterSpacing: -2, display: "flex" }}>Mansion</div>
           <div style={{ fontFamily: "Switzer", fontSize: 24, lineHeight: 1.45, marginTop: 34, color: "#4e5654", display: "flex" }}>
-            {site.hero.line}
+            A private Rococo mansion in Kumasi for traditional and white weddings, bridal shoots and stays.
           </div>
         </div>
       </div>

@@ -1,90 +1,84 @@
-import fs from "node:fs";
-import path from "node:path";
 import { getImageProps } from "next/image";
 import { media, site } from "@/content/site";
-import { DatePlaque } from "./DatePlaque";
 import { HeroVideo } from "./HeroVideo";
 import { Moulding } from "./Moulding";
 
-/** Checked at build time: the film slot renders only once the owner adds the files. */
-function videoFiles() {
-  const pub = path.join(process.cwd(), "public");
-  const has = (p: string) => fs.existsSync(path.join(pub, p));
-  const v = site.hero.video;
-  return {
-    mp4: has(v.mp4) ? v.mp4 : undefined,
-    webm: has(v.webm) ? v.webm : undefined,
-    poster: has(v.poster) ? v.poster : undefined,
-  };
-}
-
-const PORTRAIT = "(max-aspect-ratio: 1/1)";
-const LANDSCAPE = "(min-aspect-ratio: 1/1)";
-const PORTRAIT_SIZES = "(min-width: 768px) 80vw, 92vw";
-const LANDSCAPE_SIZES = "(min-width: 1280px) 88vw, 94vw";
-const MAT = 14;
-const R = 26;
+const PORTRAIT = "(orientation: portrait)";
+const LANDSCAPE = "(orientation: landscape)";
 
 /**
- * First viewport: the name set like an inscription on the frieze, the fountain
- * hung below it in a Louis XV panel, and a lacquer plaque with a working date field.
+ * Full-bleed hero reel from the house's own wedding films. A gilt moulding draws
+ * itself around the screen on arrival, so the film hangs like a painting.
  */
 export function Hero() {
-  const { image, portrait, nameLines, line } = site.hero;
-  const wide = media[image.slug];
-  const tall = media[portrait.slug];
-  const video = videoFiles();
-  const hasVideo = Boolean(video.mp4 || video.webm);
-
-  const common = { alt: image.alt, fill: true, quality: 60 } as const;
-  const { props: wideProps } = getImageProps({ ...common, src: wide.src, sizes: LANDSCAPE_SIZES });
-  const { props: tallProps } = getImageProps({ ...common, src: tall.src, sizes: PORTRAIT_SIZES });
-  const { style: _style, ...imgProps } = wideProps;
-  void _style;
+  const { heading, line, cta, secondary, proof, video, posterWide, posterTall, pause, play } = site.hero;
+  const w = media[posterWide.slug];
+  const t = media[posterTall.slug];
+  const common = { alt: posterWide.alt, fill: true, quality: 60 } as const;
+  const { props: wideProps } = getImageProps({ ...common, src: w.src, sizes: "100vw" });
+  const { props: tallProps } = getImageProps({ ...common, src: t.src, sizes: "(orientation: portrait) 100vw" });
+  const { style: _s, ...imgProps } = wideProps;
+  void _s;
 
   return (
-    <section
-      id="top"
-      aria-label={site.name}
-      className="relative flex min-h-[100svh] flex-col bg-plaster pt-[calc(4rem+env(safe-area-inset-top))] md:pt-[calc(4.5rem+env(safe-area-inset-top))]"
-    >
-      <span id="top-sentinel" aria-hidden className="absolute inset-x-0 top-0 h-2" />
-      <link rel="preload" as="image" media={PORTRAIT} imageSrcSet={tallProps.srcSet} imageSizes={PORTRAIT_SIZES} fetchPriority="high" />
-      <link rel="preload" as="image" media={LANDSCAPE} imageSrcSet={wideProps.srcSet} imageSizes={LANDSCAPE_SIZES} fetchPriority="high" />
+    <section id="top" aria-labelledby="hero-title" className="relative isolate flex min-h-[100svh] flex-col justify-end overflow-hidden bg-lacquer text-ivory">
+      <link rel="preload" as="image" media={PORTRAIT} imageSrcSet={tallProps.srcSet} imageSizes="100vw" fetchPriority="high" />
+      <link rel="preload" as="image" media={LANDSCAPE} imageSrcSet={wideProps.srcSet} imageSizes="100vw" fetchPriority="high" />
 
-      <div className="px-page mx-auto flex w-full max-w-[1720px] flex-1 flex-col">
-        <header className="pt-5 text-center md:pt-6 lg:pt-4">
-          <h1 className="inscription text-[clamp(2.75rem,14vw,5.25rem)] md:whitespace-nowrap md:text-[clamp(4rem,min(7.4vw,14svh),9.5rem)]">
-            <span className="block md:inline">{nameLines[0]}</span> <span className="block md:inline">{nameLines[1]}</span>
-          </h1>
-          <p className="mx-auto mt-4 max-w-[34ch] text-[0.9375rem] leading-relaxed text-ink-soft md:mt-5 md:max-w-[52ch] md:text-base">
-            {line}
-          </p>
-        </header>
+      <div className="absolute inset-0 -z-10">
+        <picture>
+          <source media={PORTRAIT} srcSet={tallProps.srcSet} sizes="100vw" />
+          <img
+            {...imgProps}
+            alt={posterWide.alt}
+            fetchPriority="high"
+            loading="eager"
+            decoding="async"
+            className="hero-still absolute inset-0 h-full w-full object-cover"
+            style={{ objectPosition: posterWide.position }}
+          />
+        </picture>
+        <HeroVideo wide={video.wide} tall={video.tall} pauseLabel={pause} playLabel={play} />
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-[linear-gradient(to_top,rgb(15_21_23/0.96)_0%,rgb(15_21_23/0.88)_34%,rgb(15_21_23/0.45)_56%,rgb(15_21_23/0)_74%),linear-gradient(to_bottom,rgb(15_21_23/0.55)_0%,rgb(15_21_23/0)_20%)] md:bg-[linear-gradient(to_right,rgb(15_21_23/0.8)_0%,rgb(15_21_23/0.45)_42%,rgb(15_21_23/0)_68%),linear-gradient(to_top,rgb(15_21_23/0.7)_0%,rgb(15_21_23/0)_40%),linear-gradient(to_bottom,rgb(15_21_23/0.5)_0%,rgb(15_21_23/0)_20%)]"
+        />
+      </div>
 
-        <div className="relative mt-6 flex min-h-[19rem] flex-1 flex-col pb-[calc(2.25rem+env(safe-area-inset-bottom))] md:mt-8 md:pb-14 landscape:min-h-[15rem]">
-          <div className="relative min-h-0 flex-1">
-            <div className="notched absolute overflow-hidden bg-lacquer" style={{ inset: MAT, ["--r" as string]: `${R}px` }}>
-              <picture>
-                <source media={PORTRAIT} srcSet={tallProps.srcSet} sizes={PORTRAIT_SIZES} />
-                <img
-                  {...imgProps}
-                  alt={image.alt}
-                  fetchPriority="high"
-                  loading="eager"
-                  decoding="async"
-                  className="drift absolute inset-0 h-full w-full object-cover"
-                  style={{ objectPosition: image.position }}
-                />
-              </picture>
-              {hasVideo && <HeroVideo {...video} position={image.position} />}
-            </div>
-            <Moulding lines={[{ inset: 0.5, radius: R + 10 }, { inset: 6, radius: R + 5 }]} drawOn="mount" duration={2000} className="text-gilt" />
-          </div>
-          <div className="relative -mt-9 px-6 md:-mt-11">
-            <DatePlaque />
-          </div>
+      {/* Signature: the gilt moulding draws around the screen like a picture frame. */}
+      <div aria-hidden className="pointer-events-none absolute inset-[max(0.625rem,env(safe-area-inset-left))] top-[calc(0.625rem+env(safe-area-inset-top))] md:inset-5">
+        <Moulding lines={[{ inset: 0.5, radius: 22 }, { inset: 6, radius: 16, width: 0.6 }]} drawOn="mount" duration={2400} className="text-gilt-light/80" />
+      </div>
+
+      <div className="px-page mx-auto w-full max-w-[1720px] pb-[calc(5.5rem+env(safe-area-inset-bottom))] md:pb-20 lg:pb-24">
+        <h1 id="hero-title" className="hero-rise font-display max-w-[13ch] text-[clamp(2.25rem,10vw,4rem)] leading-[1.04] tracking-[-0.025em] md:max-w-[12ch] md:text-[clamp(3.25rem,5.4vw,6rem)] [@media(orientation:landscape)_and_(max-height:500px)]:text-[2.4rem]">
+          {heading}
+        </h1>
+        <p className="hero-rise mt-5 max-w-[38ch] text-[1.0625rem] leading-relaxed text-ivory/85 md:mt-7 md:text-lg" style={{ ["--d" as string]: "160ms" }}>
+          {line}
+        </p>
+        <div className="hero-rise mt-7 flex flex-wrap items-center gap-x-3 gap-y-3 md:mt-10" style={{ ["--d" as string]: "300ms" }}>
+          <a
+            href={site.contact.checkDateUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="press inline-flex min-h-14 items-center justify-center whitespace-nowrap bg-gilt-light px-8 text-[1rem] font-medium text-lacquer hover:bg-ivory"
+          >
+            {cta}
+          </a>
+          <a
+            href="#films"
+            className="press inline-flex min-h-12 items-center justify-center gap-3 px-2 text-[1rem] text-ivory underline decoration-gilt-light/70 underline-offset-[0.35em] hover:text-gilt-light md:min-h-14 md:px-6 md:no-underline md:ring-1 md:ring-ivory/45"
+          >
+            <svg aria-hidden viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="currentColor">
+              <path d="M7 4.5v15l12-7.5z" />
+            </svg>
+            {secondary}
+          </a>
         </div>
+        <p className="hero-rise mt-7 text-[0.875rem] text-ivory/70 [@media(orientation:landscape)_and_(max-height:500px)]:hidden" style={{ ["--d" as string]: "420ms" }}>
+          {proof}
+        </p>
       </div>
     </section>
   );

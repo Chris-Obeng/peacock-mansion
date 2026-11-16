@@ -40,12 +40,14 @@ function usePreconnect() {
 
 /** Three films behind three doors: arched frames in black lacquer, one playing at a time. */
 export function Film() {
-  const { heading, note, films, profileCta, playLabel } = site.film;
+  const { heading, line: note, items: films, more: profileCta, playLabel } = site.films;
   const [active, setActive] = useState<string | null>(null);
   const warm = usePreconnect();
+  const track = useRef<HTMLUListElement>(null);
+  const step = (dir: number) => track.current?.scrollBy({ left: dir * track.current.clientWidth * 0.8, behavior: "smooth" });
 
   return (
-    <section id="film" aria-labelledby="film-title" className="cv-auto overflow-hidden bg-lacquer py-24 text-ivory md:py-32 lg:py-40">
+    <section id="films" aria-labelledby="film-title" className="cv-auto overflow-hidden bg-lacquer py-24 text-ivory md:py-32 lg:py-40">
       <div className="px-page mx-auto max-w-[1720px]">
         <div className="mb-12 grid gap-5 md:mb-16 md:grid-cols-12 md:items-end md:gap-x-6">
           <h2 id="film-title" className="font-display text-[clamp(2.25rem,8.4vw,3.25rem)] leading-none md:col-span-7 md:text-[clamp(2.75rem,4.6vw,4.75rem)]">
@@ -59,18 +61,34 @@ export function Film() {
               rel="noopener noreferrer"
               className="mt-3 inline-flex min-h-11 items-center text-[0.9375rem] text-gilt-light underline decoration-gilt/60 underline-offset-[0.35em] hover:text-ivory"
             >
-              {profileCta} {site.contact.tiktokHandle}
+              {profileCta}
             </a>
           </div>
         </div>
       </div>
 
+      <div className="px-page mx-auto mb-6 hidden max-w-[1720px] justify-end gap-2 md:flex">
+        {[-1, 1].map((d) => (
+          <button
+            key={d}
+            type="button"
+            onClick={() => step(d)}
+            aria-label={d < 0 ? "Previous films" : "Next films"}
+            className="press flex h-12 w-12 items-center justify-center rounded-full text-ivory ring-1 ring-ivory/40 hover:bg-ivory hover:text-lacquer"
+          >
+            <svg aria-hidden viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.2">
+              <path d={d < 0 ? "M15 5l-7 7 7 7" : "M9 5l7 7-7 7"} />
+            </svg>
+          </button>
+        ))}
+      </div>
       <ul
-        className="snap-track px-page mx-auto flex max-w-[1720px] scroll-px-5 gap-4 overflow-x-auto pb-2 md:scroll-px-10 md:gap-6 lg:grid lg:grid-cols-3 lg:gap-10 lg:overflow-visible xl:gap-16"
+        ref={track}
+        className="snap-track px-page mx-auto flex max-w-[1720px] scroll-px-5 gap-4 overflow-x-auto pb-4 md:scroll-px-10 md:gap-6 lg:gap-8"
         aria-label="Films"
       >
         {films.map((f) => (
-          <li key={f.id} className="w-[74vw] max-w-[22rem] shrink-0 snap-start md:w-[42vw] lg:w-auto lg:max-w-none">
+          <li key={f.id} className="w-[70vw] max-w-[20rem] shrink-0 snap-start md:w-[36vw] lg:w-[22vw] lg:max-w-[24rem]">
             <FilmDoor film={f} active={active === f.id} onPlay={() => setActive(f.id)} onIntent={warm} playLabel={playLabel} />
           </li>
         ))}

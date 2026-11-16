@@ -22,8 +22,8 @@ npm install
 npm run dev               # local development
 npm run build && npm start
 
-npm run media:fetch       # download listing originals into .media-src/ (git-ignored)
-npm run media             # crop/resize masters into public/media/images + blur placeholders
+FFMPEG=/path/to/ffmpeg npm run media      # photos + film stills from media-source/ into public/media/images
+FFMPEG=/path/to/ffmpeg npm run hero:reel  # cut the hero reel (wide + tall) into .media-build/hero
 
 # Verification (each starts a temporary production server)
 scripts/with-server.sh node scripts/screenshots.mjs          # 11 viewports, overflow, tap targets, words, lightbox, form, film
@@ -32,6 +32,12 @@ scripts/with-server.sh node scripts/lighthouse.mjs           # mobile Lighthouse
 ```
 
 Output goes to `.artifacts/` (git-ignored).
+
+## Media
+
+- `media-source/images` and `media-source/videos` hold the owner's originals. They are not served; `public/` only gets the processed photos.
+- The hero reel lives on ImageKit at `ik.imagekit.io/eofreoilt/peacock-mansion/hero/`. It is requested with `?tr=orig-true`, so ImageKit serves the file as uploaded and spends no video-processing units. To replace it, run `npm run hero:reel` and upload the two files to the same paths.
+- The other films play from TikTok when tapped.
 
 ## Deploy
 

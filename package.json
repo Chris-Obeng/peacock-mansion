@@ -12,7 +12,7 @@
     "media": "node scripts/process-images.mjs",
     "og": "node scripts/make-og.mjs",
     "shots": "node scripts/screenshots.mjs",
-    "media:fetch": "node scripts/fetch-media.mjs"
+    "hero:reel": "node scripts/hero-reel.mjs"
   },
   "dependencies": {
     "motion": "^14.14.0",
