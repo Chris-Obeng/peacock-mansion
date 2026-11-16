@@ -2,9 +2,11 @@ import fs from "node:fs";
 import path from "node:path";
 import { getImageProps } from "next/image";
 import { media, site } from "@/content/site";
+import { DatePlaque } from "./DatePlaque";
 import { HeroVideo } from "./HeroVideo";
+import { Moulding } from "./Moulding";
 
-/** Checked at build time: the film slot only renders once the owner adds the files. */
+/** Checked at build time: the film slot renders only once the owner adds the files. */
 function videoFiles() {
   const pub = path.join(process.cwd(), "public");
   const has = (p: string) => fs.existsSync(path.join(pub, p));
@@ -16,91 +18,74 @@ function videoFiles() {
   };
 }
 
-const PORTRAIT = "(orientation: portrait)";
-const LANDSCAPE = "(orientation: landscape)";
-// Portrait frames are covered by height, so size by the viewport height times the crop's aspect.
-const PORTRAIT_SIZES = "82vh";
-const LANDSCAPE_SIZES = "max(100vw, 150vh)";
+const PORTRAIT = "(max-aspect-ratio: 1/1)";
+const LANDSCAPE = "(min-aspect-ratio: 1/1)";
+const PORTRAIT_SIZES = "(min-width: 768px) 80vw, 92vw";
+const LANDSCAPE_SIZES = "(min-width: 1280px) 88vw, 94vw";
+const MAT = 14;
+const R = 26;
 
+/**
+ * First viewport: the name set like an inscription on the frieze, the fountain
+ * hung below it in a Louis XV panel, and a lacquer plaque with a working date field.
+ */
 export function Hero() {
-  const { image, portrait, label, nameLines, line, cta } = site.hero;
+  const { image, portrait, nameLines, line } = site.hero;
   const wide = media[image.slug];
   const tall = media[portrait.slug];
   const video = videoFiles();
   const hasVideo = Boolean(video.mp4 || video.webm);
 
-  // Art direction: the portrait crop keeps the fountain centred on phones.
-  const common = { alt: image.alt, fill: true, quality: 55 } as const;
+  const common = { alt: image.alt, fill: true, quality: 60 } as const;
   const { props: wideProps } = getImageProps({ ...common, src: wide.src, sizes: LANDSCAPE_SIZES });
   const { props: tallProps } = getImageProps({ ...common, src: tall.src, sizes: PORTRAIT_SIZES });
-  const { style: _ignored, ...imgProps } = wideProps;
-  void _ignored;
+  const { style: _style, ...imgProps } = wideProps;
+  void _style;
 
   return (
     <section
-      id="hero"
+      id="top"
       aria-label={site.name}
-      className="relative isolate flex min-h-[100svh] flex-col justify-end overflow-hidden bg-ink pt-[calc(5.5rem+env(safe-area-inset-top))] text-ivory"
+      className="relative flex min-h-[100svh] flex-col bg-plaster pt-[calc(4rem+env(safe-area-inset-top))] md:pt-[calc(4.5rem+env(safe-area-inset-top))]"
     >
+      <span id="top-sentinel" aria-hidden className="absolute inset-x-0 top-0 h-2" />
       <link rel="preload" as="image" media={PORTRAIT} imageSrcSet={tallProps.srcSet} imageSizes={PORTRAIT_SIZES} fetchPriority="high" />
       <link rel="preload" as="image" media={LANDSCAPE} imageSrcSet={wideProps.srcSet} imageSizes={LANDSCAPE_SIZES} fetchPriority="high" />
 
-      {/* Signature moment: the photograph opens out of the mansion's arched doorway. */}
-      <div className="hero-arch absolute inset-0 -z-10">
-        <div
-          className="hero-settle absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url("${wide.blurDataURL}")` }}
-        >
-          <picture>
-            <source media={PORTRAIT} srcSet={tallProps.srcSet} sizes={PORTRAIT_SIZES} />
-            <img
-              {...imgProps}
-              alt={image.alt}
-              fetchPriority="high"
-              loading="eager"
-              decoding="async"
-              className="absolute inset-0 h-full w-full object-cover object-[50%_50%] landscape:object-[var(--pos)]"
-              style={{ ["--pos" as string]: image.position }}
-            />
-          </picture>
-          {hasVideo && <HeroVideo {...video} position={image.position} />}
-        </div>
-        {/* Legibility: a gentle ink fall-off at the base only, never a blur. */}
-        <div
-          aria-hidden
-          className="absolute inset-0 bg-[linear-gradient(to_top,rgb(22_20_15/0.82)_0%,rgb(22_20_15/0.45)_32%,rgb(22_20_15/0)_62%),linear-gradient(to_bottom,rgb(22_20_15/0.45)_0%,rgb(22_20_15/0)_18%)]"
-        />
-      </div>
+      <div className="px-page mx-auto flex w-full max-w-[1720px] flex-1 flex-col">
+        <header className="pt-5 text-center md:pt-6 lg:pt-4">
+          <h1 className="inscription text-[clamp(2.75rem,14vw,5.25rem)] md:whitespace-nowrap md:text-[clamp(4rem,min(7.4vw,14svh),9.5rem)]">
+            <span className="block md:inline">{nameLines[0]}</span> <span className="block md:inline">{nameLines[1]}</span>
+          </h1>
+          <p className="mx-auto mt-4 max-w-[34ch] text-[0.9375rem] leading-relaxed text-ink-soft md:mt-5 md:max-w-[52ch] md:text-base">
+            {line}
+          </p>
+        </header>
 
-      <div className="px-page mx-auto w-full max-w-[1680px] pb-[calc(2.5rem+env(safe-area-inset-bottom))] md:pb-16 lg:pb-20">
-        <p className="label hero-fade mb-5 text-gold-light md:mb-7 [@media(orientation:landscape)_and_(max-height:500px)]:mb-3" style={{ ["--d" as string]: "900ms" }}>
-          {label}
-        </p>
-        <h1 className="font-display text-[clamp(3.25rem,min(15.5vw,19svh),10.5rem)] md:text-[clamp(3.25rem,min(13vw,17svh),10rem)] leading-[0.9] tracking-[-0.03em]">
-          {nameLines.map((l, i) => (
-            <span key={l} className="block overflow-hidden pb-[0.06em]">
-              <span className="hero-line" style={{ ["--d" as string]: `${450 + i * 130}ms` }}>
-                {i === 1 ? <em className="italic">{l}</em> : l}
-              </span>
-            </span>
-          ))}
-        </h1>
-        <div
-          className="hero-fade mt-6 [@media(orientation:landscape)_and_(max-height:500px)]:mt-4 flex flex-col gap-7 md:mt-10 md:flex-row md:items-end md:justify-between"
-          style={{ ["--d" as string]: "1000ms" }}
-        >
-          <p className="hero-line-copy max-w-[30ch] text-[1.0625rem] leading-relaxed text-ivory/90 md:text-lg">{line}</p>
-          <a
-            href="#enquire"
-            className="press label inline-flex min-h-12 w-fit items-center gap-4 bg-ivory px-7 text-ink hover:bg-gold-light"
-          >
-            {cta}
-            <span aria-hidden className="h-px w-8 bg-ink" />
-          </a>
+        <div className="relative mt-6 flex min-h-[19rem] flex-1 flex-col pb-[calc(2.25rem+env(safe-area-inset-bottom))] md:mt-8 md:pb-14 landscape:min-h-[15rem]">
+          <div className="relative min-h-0 flex-1">
+            <div className="notched absolute overflow-hidden bg-lacquer" style={{ inset: MAT, ["--r" as string]: `${R}px` }}>
+              <picture>
+                <source media={PORTRAIT} srcSet={tallProps.srcSet} sizes={PORTRAIT_SIZES} />
+                <img
+                  {...imgProps}
+                  alt={image.alt}
+                  fetchPriority="high"
+                  loading="eager"
+                  decoding="async"
+                  className="drift absolute inset-0 h-full w-full object-cover"
+                  style={{ objectPosition: image.position }}
+                />
+              </picture>
+              {hasVideo && <HeroVideo {...video} position={image.position} />}
+            </div>
+            <Moulding lines={[{ inset: 0.5, radius: R + 10 }, { inset: 6, radius: R + 5 }]} drawOn="mount" duration={2000} className="text-gilt" />
+          </div>
+          <div className="relative -mt-9 px-6 md:-mt-11">
+            <DatePlaque />
+          </div>
         </div>
       </div>
-
-      <span aria-hidden className="hero-draw absolute bottom-0 right-[max(1.25rem,4vw)] hidden h-16 w-px bg-gold-light md:block" />
     </section>
   );
 }

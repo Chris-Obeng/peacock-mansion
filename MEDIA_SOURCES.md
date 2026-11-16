@@ -1,5 +1,7 @@
 # Media sources
 
+> v2 note: the photographs are now hung in moulded frames (see DESIGN.md). Hero uses #1 on landscape screens and #2 on portrait screens; the OG image uses #1.
+
 Every photograph on the site is a **placeholder, pending the owner's original**. All of them are host-uploaded listing photos of The Peacock Mansion, downloaded at full resolution (originals are 3024–5712 px wide), saved locally and served from `/public/media/images`. Nothing is hotlinked.
 
 Selection rules: sharp, well lit, at least 1600 px wide at source, no watermark or platform UI, no identifiable guests. Crops and the download URLs are defined in [`scripts/media-manifest.mjs`](scripts/media-manifest.mjs). Re-create everything with `npm run media:fetch && npm run media`.
@@ -23,7 +25,7 @@ Listing pages: Airbnb [47817091](https://www.airbnb.com/rooms/47817091) (L1) and
 | 13 | `salon-above.jpg` | [original](https://a0.muscache.com/pictures/hosting/Hosting-47822494/original/a754152e-7a17-47d5-bbfe-ed667599ab6f.jpeg) | L2 | Double-height salon from above, peacock plaster relief; the setting of the bridal film. | Gallery, film poster 2 | placeholder, pending owner's original |
 | 14 | `arched-door.jpg` | [original](https://a0.muscache.com/pictures/hosting/Hosting-47817091/original/72a2661e-b896-4899-809a-244cfb492ff6.jpeg) | L1 | Arched black door in plaster; inspired the hero's arch reveal. | Gallery, Visit | placeholder, pending owner's original |
 | 15 | `console-pair.jpg` | [original](https://a0.muscache.com/pictures/hosting/Hosting-47817091/original/e5f31067-6901-4ee1-809b-240e0ca15fbf.jpeg) | L1 | Console between gilt chairs under a cherub mirror; calm portrait backdrop. | Gallery | placeholder, pending owner's original |
-| 16 | `peacock-emblem.jpg` | [original](https://a0.muscache.com/pictures/hosting/Hosting-47822494/original/0153824f-3ad2-4644-b2f7-494833f2f4e0.jpeg) | L2 | The house's own gold peacock emblem on linen; inspired the site ornament. | Gallery, Enquire (desktop) | placeholder, pending owner's original |
+| 16 | `peacock-emblem.jpg` | [original](https://a0.muscache.com/pictures/hosting/Hosting-47822494/original/0153824f-3ad2-4644-b2f7-494833f2f4e0.jpeg) | L2 | The house's own gold peacock emblem on linen; inspired the site ornament. | Gallery | placeholder, pending owner's original |
 
 ## Deliberately not used
 

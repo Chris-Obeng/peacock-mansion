@@ -113,7 +113,7 @@ for (const vp of viewports.filter((v) => !only || only.includes(v.name))) {
   await page.waitForTimeout(100);
   const closed = await page.evaluate(() => !document.querySelector("dialog.lightbox[open]"));
   const focusBack = await page.evaluate(() => document.activeElement?.getAttribute("aria-label")?.slice(0, 40));
-  const ok = pos1.includes("04") && pos2.includes("05") && focusInside && closed && /photograph 5 of/.test(focusBack ?? "");
+  const ok = /\b4 of/.test(pos1) && /\b5 of/.test(pos2) && focusInside && closed && /photograph 5 of/.test(focusBack ?? "");
   console.log(`Lightbox keyboard: open "${pos1.replace(/\s+/g, " ")}" -> next "${pos2.replace(/\s+/g, " ")}", focus trapped ${focusInside}, closed ${closed}, focus returned to "${focusBack}" ${ok ? "ok" : "FAIL"}`);
   if (!ok) failures++;
 

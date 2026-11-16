@@ -7,7 +7,7 @@ export interface Enquiry {
   guests: string;
 }
 
-function formatDate(iso: string): string {
+export function formatDate(iso: string): string {
   const [y, mo, d] = iso.split("-").map(Number);
   if (!y || !mo || !d) return iso;
   return new Date(Date.UTC(y, mo - 1, d)).toLocaleDateString("en-GB", {

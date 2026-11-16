@@ -9,7 +9,11 @@ Single-page site for The Peacock Mansion, a private French Rococo-style house in
 
 ## Stack
 
-Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS 4 · Motion · `next/image` + sharp · `next/font` (Bodoni Moda, Jost). No database, no auth, no tracking.
+Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4, Motion (lightbox swipe only), `next/image` + sharp, `next/font/local` (Zodiak and Switzer from Indian Type Foundry). No database, no auth, no tracking.
+
+Design system: [`DESIGN.md`](DESIGN.md). Product facts: [`PRODUCT.md`](PRODUCT.md).
+
+Font licence: Zodiak and Switzer are used under the ITF Free Font License (`app/fonts/ITF-FFL-License.txt`), which allows self-hosting on your own website but not redistributing the font files. Keep this repository private.
 
 ## Commands
 

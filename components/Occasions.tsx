@@ -1,61 +1,114 @@
+"use client";
+
+import Image from "next/image";
+import { useId, useRef, useState, type KeyboardEvent } from "react";
+import { media } from "@/content/media.generated";
 import { site } from "@/content/site";
-import { Picture } from "./Picture";
-import { Reveal } from "./Reveal";
+import { Moulding } from "./Moulding";
 
-/** Three rows that deliberately do not match: image size, side and ratio change each time. */
-const rows = [
-  {
-    image: "col-span-4 md:col-span-5 lg:col-span-6 lg:col-start-1",
-    text: "col-span-4 md:col-span-3 md:col-start-6 md:self-end lg:col-span-4 lg:col-start-8",
-    aspect: "4 / 3",
-    sizes: "(min-width:1024px) 48vw, (min-width:768px) 60vw, 100vw",
-  },
-  {
-    image: "col-span-3 col-start-2 md:col-span-3 md:col-start-6 md:row-start-1 lg:col-span-3 lg:col-start-9",
-    text: "col-span-4 md:col-span-4 md:col-start-1 md:row-start-1 md:self-center lg:col-span-4 lg:col-start-3",
-    aspect: "4 / 5",
-    sizes: "(min-width:1024px) 24vw, (min-width:768px) 36vw, 75vw",
-  },
-  {
-    image: "col-span-4 md:col-span-4 md:col-start-2 lg:col-span-4 lg:col-start-2",
-    text: "col-span-4 md:col-span-3 md:col-start-6 md:self-start md:pt-16 lg:col-span-4 lg:col-start-7 lg:pt-32",
-    aspect: "1 / 1",
-    sizes: "(min-width:1024px) 32vw, (min-width:768px) 48vw, 100vw",
-  },
-];
+const MAT = 14;
+const R = 18;
 
+/**
+ * One fixed frame, three occasions. The frame never moves; only what hangs in it
+ * changes, the way a room is dressed differently for each event.
+ */
 export function Occasions() {
-  const { label, heading, items } = site.occasions;
+  const { heading, items } = site.occasions;
+  const [active, setActive] = useState(0);
+  const uid = useId();
+  const tabs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  function onKeyDown(e: KeyboardEvent<HTMLDivElement>) {
+    const n = items.length;
+    let next = -1;
+    if (e.key === "ArrowDown" || e.key === "ArrowRight") next = (active + 1) % n;
+    if (e.key === "ArrowUp" || e.key === "ArrowLeft") next = (active - 1 + n) % n;
+    if (e.key === "Home") next = 0;
+    if (e.key === "End") next = n - 1;
+    if (next < 0) return;
+    e.preventDefault();
+    setActive(next);
+    tabs.current[next]?.focus();
+  }
+
   return (
-    <section id="occasions" aria-labelledby="occasions-title" className="cv-auto bg-ivory py-24 md:py-36 lg:py-48">
-      <div className="px-page mx-auto max-w-[1680px]">
-        <Reveal as="header" className="mb-16 max-w-3xl md:mb-24">
-          <p className="label text-gold-text">{label}</p>
-          <h2 id="occasions-title" className="font-display mt-6 text-[clamp(2.4rem,8vw,5rem)] leading-[1.02]">
+    <section id="occasions" aria-labelledby="occasions-title" className="cv-auto bg-plaster py-24 md:py-32 lg:py-40">
+      <div className="px-page mx-auto grid max-w-[1720px] gap-10 md:grid-cols-12 md:gap-x-6 lg:gap-x-10">
+        <div className="md:col-span-5 md:self-center lg:col-span-4">
+          <h2 id="occasions-title" className="font-display text-[clamp(2.25rem,8.4vw,3.25rem)] leading-[1.04] md:text-[clamp(2.5rem,3.9vw,4rem)]">
             {heading}
           </h2>
-        </Reveal>
 
-        <ol className="flex flex-col gap-24 md:gap-32 lg:gap-40">
-          {items.map((item, i) => {
-            const r = rows[i]!;
-            return (
-              <li key={item.title} className="grid grid-cols-4 gap-x-5 gap-y-8 md:grid-cols-8 md:gap-x-6 lg:grid-cols-12">
-                <Reveal className={r.image}>
-                  <Picture image={item.image} aspect={r.aspect} sizes={r.sizes} />
-                </Reveal>
-                <Reveal className={r.text} delay={0.12}>
-                  <span aria-hidden className="font-display block text-[clamp(3.5rem,10vw,7rem)] italic leading-none text-gold">
-                    {item.numeral}
+          <div role="tablist" aria-label={heading} aria-orientation="vertical" onKeyDown={onKeyDown} className="mt-10 border-t border-gilt/40 md:mt-14">
+            {items.map((it, i) => {
+              const selected = i === active;
+              return (
+                <button
+                  key={it.title}
+                  ref={(el) => {
+                    tabs.current[i] = el;
+                  }}
+                  id={`${uid}-tab-${i}`}
+                  role="tab"
+                  type="button"
+                  aria-selected={selected}
+                  aria-controls={`${uid}-panel`}
+                  tabIndex={selected ? 0 : -1}
+                  onClick={() => setActive(i)}
+                  className="group block w-full border-b border-gilt/40 py-5 text-left md:py-6"
+                >
+                  <span
+                    className={`font-display block text-[1.75rem] leading-tight transition-colors duration-300 md:text-[2rem] ${
+                      selected ? "text-ink" : "text-ink-soft/70 group-hover:text-ink"
+                    }`}
+                  >
+                    {selected ? <em>{it.title}</em> : it.title}
                   </span>
-                  <h3 className="font-display mt-4 text-[clamp(1.75rem,4.5vw,2.75rem)] leading-tight">{item.title}</h3>
-                  <span className="hairline mt-5 block w-12 text-gold" aria-hidden />
-                  <p className="mt-5 max-w-[32ch] text-[1.0625rem] leading-relaxed text-ink-soft">{item.line}</p>
-                </Reveal>
-              </li>
-            );
-          })}
-        </ol>
+                  <span
+                    className={`grid transition-[grid-template-rows,opacity] duration-500 ease-[var(--ease-out)] ${
+                      selected ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                    }`}
+                  >
+                    <span className="overflow-hidden">
+                      <span className="block max-w-[34ch] pt-2 text-[1rem] leading-relaxed text-ink-soft">{it.line}</span>
+                    </span>
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div
+          id={`${uid}-panel`}
+          role="tabpanel"
+          aria-labelledby={`${uid}-tab-${active}`}
+          className="relative order-first aspect-[4/5] md:order-none md:col-span-7 md:aspect-auto md:min-h-[min(48vw,52rem)] lg:col-span-7 lg:col-start-6"
+        >
+          <div className="notched absolute overflow-hidden bg-plaster-deep" style={{ inset: MAT, ["--r" as string]: `${R}px` }}>
+            {items.map((it, i) => {
+              const m = media[it.image.slug];
+              return (
+                <div key={it.title} className="swap absolute inset-0" data-active={i === active} aria-hidden={i !== active}>
+                  <Image
+                    src={m.src}
+                    alt={i === active ? it.image.alt : ""}
+                    fill
+                    sizes="(min-width: 768px) 58vw, 100vw"
+                    quality={65}
+                    placeholder="blur"
+                    blurDataURL={m.blurDataURL}
+                    loading="lazy"
+                    className="object-cover"
+                    style={{ objectPosition: (it.image as { position?: string }).position ?? "50% 50%" }}
+                  />
+                </div>
+              );
+            })}
+          </div>
+          <Moulding lines={[{ inset: 0.5, radius: R + MAT - 1 }, { inset: 7, radius: R + 6 }]} className="text-gilt" />
+        </div>
       </div>
     </section>
   );

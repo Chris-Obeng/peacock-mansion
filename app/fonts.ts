@@ -1,31 +1,31 @@
-import { Bodoni_Moda, Jost } from "next/font/google";
+import localFont from "next/font/local";
 
 /**
- * High-contrast Didone display serif; the optical-size axis keeps hairlines intact at large sizes.
- * Only the upright cut is preloaded: it paints the hero name. Italic and Jost swap in without
- * layout shift thanks to next/font's metric-matched fallbacks.
+ * Zodiak (Indian Type Foundry): a wide, high-contrast display serif whose curled
+ * italic and ampersand carry the Rococo voice. Self-hosted under the ITF Free Font
+ * License (app/fonts/ITF-FFL-License.txt).
  */
-export const bodoni = Bodoni_Moda({
-  subsets: ["latin"],
-  style: ["normal"],
-  axes: ["opsz"],
+export const zodiak = localFont({
+  src: [{ path: "./fonts/Zodiak-Variable.woff2", weight: "100 900", style: "normal" }],
+  variable: "--font-zodiak",
   display: "swap",
-  variable: "--font-bodoni",
+  preload: true,
+  fallback: ["Didot", "Georgia", "serif"],
 });
 
-export const bodoniItalic = Bodoni_Moda({
-  subsets: ["latin"],
-  style: ["italic"],
-  axes: ["opsz"],
+export const zodiakItalic = localFont({
+  src: [{ path: "./fonts/Zodiak-VariableItalic.woff2", weight: "100 900", style: "italic" }],
+  variable: "--font-zodiak-italic",
   display: "swap",
   preload: false,
-  variable: "--font-bodoni-italic",
+  fallback: ["Didot", "Georgia", "serif"],
 });
 
-/** Geometric sans in the Futura tradition, for labels and practical text. */
-export const jost = Jost({
-  subsets: ["latin"],
+/** Switzer (Indian Type Foundry): a calm neo-grotesque for the practical voice. */
+export const switzer = localFont({
+  src: [{ path: "./fonts/Switzer-Variable.woff2", weight: "100 900", style: "normal" }],
+  variable: "--font-switzer",
   display: "swap",
   preload: false,
-  variable: "--font-jost",
+  fallback: ["Helvetica Neue", "Arial", "sans-serif"],
 });
