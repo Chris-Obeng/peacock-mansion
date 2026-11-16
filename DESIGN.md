@@ -1,5 +1,7 @@
 # Design system: Boiserie
 
+> v3 (16 Nov 2026): rebuilt around the owner's own wedding photography and films. Hero is now a full-bleed film with the gilt moulding drawn around the whole screen; the house frame language, palette and type below are unchanged. Pages: `/` and `/gallery`.
+
 The site is built as the house's own panelled wall. Photographs hang in Louis XV mouldings with concave corners and a drawn gilt line, the way paintings hang in the salon. This file documents the built system (v2). The direction contract lives in `.impeccable/surfaces/app-page-tsx.md`.
 
 ## Palette
@@ -38,13 +40,16 @@ Colour strategy: plaster carries most of the page; lacquer and teal each own one
 
 | Section | Structure |
 | --- | --- |
-| Hero | Inscription centred on the frieze; the fountain hung below in a wide (landscape) or tall (portrait) panel; the date plaque set into its lower moulding. |
-| The house | A wall elevation: heading and copy in the frieze, three panels of one height below (narrow, wide, narrow). |
-| Gallery | A salon hang: 11 frames packed edge to edge on a square grid (4 columns on phones, 12 from 768 px). |
-| Occasions | One fixed frame; three tabs change what hangs in it. |
-| Film | Three arched frames on lacquer; one TikTok player at a time. |
-| Enquire | Teal wall; four field panels; the WhatsApp message writes itself in a plaster card as you type. |
-| Visit | "Kumasi" inscription, contact rows ruled in gilt, the arched door. |
+| Hero | Full-bleed hero reel (tall cut on portrait screens, wide on landscape) behind a value-proposition headline, two actions and one proof line; gilt moulding drawn around the screen. |
+| The house | Value proposition: four reasons, each with its own framed photograph, sides alternating; a ruled row of three facts. |
+| Occasions | Four tabs re-dress one frame with two photographs and an occasion-specific WhatsApp question. |
+| Films | Eight arched frames on lacquer in a scroll-snap track with arrows; one TikTok player at a time. |
+| Through their lenses | Seven-photo salon hang, packed, linking to /gallery. |
+| Proof and steps | Guest review in a moulded frame on lacquer; three numbered steps (a real sequence). |
+| Questions | Native details/summary accordion answering objections with verified facts. |
+| Enquire | Teal wall; four field panels; the WhatsApp message writes itself as you type. |
+| Visit | "Kumasi" inscription, contact rows ruled in gilt, the façade. |
+| /gallery | Filters (all, white weddings, traditional, portraits, the house), masonry at each photo's own ratio, studio credits, lightbox. |
 
 ## Motion
 

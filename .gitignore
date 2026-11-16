@@ -22,3 +22,4 @@ npm-debug.log*
 /.impeccable/mocks/
 /.impeccable/questions/
 /.impeccable/review/
+/.media-build/

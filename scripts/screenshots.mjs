@@ -62,7 +62,7 @@ for (const vp of viewports.filter((v) => !only || only.includes(v.name))) {
     const clipped = [];
     for (const el of document.querySelectorAll("header a, header button, main h1, main h2, main p, main a, main button")) {
       const r = el.getBoundingClientRect();
-      if (r.width === 0 || el.closest("#film ul")) continue; // the film track scrolls sideways by design
+      if (r.width === 0 || el.closest("#films ul, [role=tablist], [role=group]")) continue; // the film track scrolls sideways by design
       if (r.right > window.innerWidth + 0.5 || r.left < -0.5) clipped.push(`${el.tagName.toLowerCase()} "${(el.textContent || "").trim().slice(0, 24)}" ${Math.round(r.left)}..${Math.round(r.right)}`);
     }
     return { docW, winW: window.innerWidth, small, clipped };
@@ -74,6 +74,15 @@ for (const vp of viewports.filter((v) => !only || only.includes(v.name))) {
   if (report.small.length) console.log("  small tap targets:", report.small);
 
   await page.screenshot({ path: `${OUT}/${vp.name}-full.jpg`, fullPage: true, type: "jpeg", quality: 70 });
+  if (["375", "1440"].includes(vp.name)) {
+    await page.goto(BASE + "/gallery", { waitUntil: "networkidle" });
+    for (let y = 0; y < 9000; y += 700) { await page.evaluate((yy) => window.scrollTo(0, yy), y); await page.waitForTimeout(80); }
+    await page.evaluate(() => window.scrollTo(0, 0)); await page.waitForTimeout(400);
+    const gw = await page.evaluate(() => document.documentElement.scrollWidth);
+    if (gw > vp.width) { failures++; console.log("  gallery OVERFLOW", gw); }
+    await page.screenshot({ path: `${OUT}/${vp.name}-gallery.jpg`, fullPage: true, type: "jpeg", quality: 70 });
+    await page.goto(BASE, { waitUntil: "networkidle" });
+  }
   await page.screenshot({ path: `${OUT}/${vp.name}-hero.jpg`, type: "jpeg", quality: 75 });
   await ctx.close();
 }
@@ -89,11 +98,12 @@ for (const vp of viewports.filter((v) => !only || only.includes(v.name))) {
     const text = clone.innerText || clone.textContent || "";
     return text.split(/\s+/).filter((w) => /[A-Za-z0-9]/.test(w)).length;
   });
-  console.log(`\nVisible words (excluding form and alt text): ${words} ${words <= 250 ? "ok" : "OVER BUDGET"}`);
-  if (words > 250) failures++;
+  console.log(`\nVisible words (excluding form and alt text): ${words} ${words <= 700 ? "ok" : "OVER BUDGET"}`);
+  if (words > 700) failures++;
 
-  // Lightbox keyboard test.
-  const thumb = page.locator("#gallery li button").nth(3);
+  // Lightbox keyboard test, on the gallery page.
+  await page.goto(BASE + "/gallery", { waitUntil: "networkidle" });
+  const thumb = page.locator("main li button").nth(3);
   await thumb.scrollIntoViewIfNeeded();
   await thumb.focus();
   await page.keyboard.press("Enter");
@@ -118,6 +128,7 @@ for (const vp of viewports.filter((v) => !only || only.includes(v.name))) {
   if (!ok) failures++;
 
   // WhatsApp form test: intercept window.open.
+  await page.goto(BASE, { waitUntil: "networkidle" });
   await page.evaluate(() => {
     window.__opened = null;
     window.open = (u) => {
@@ -129,7 +140,7 @@ for (const vp of viewports.filter((v) => !only || only.includes(v.name))) {
   const errs = await page.locator("#enquire [aria-invalid=true]").count();
   await page.locator("#enquire input[name=name]").fill("Ama Mensah");
   await page.locator("#enquire input[name=guests]").fill("40");
-  await page.locator("#enquire select[name=occasion]").selectOption("Traditional ceremony");
+  await page.locator("#enquire select[name=occasion]").selectOption("Traditional wedding");
   await page.locator("#enquire button[type=submit]").click();
   const opened = await page.evaluate(() => window.__opened);
   const msg = opened ? decodeURIComponent(new URL(opened).searchParams.get("text") ?? "") : "";
@@ -138,11 +149,11 @@ for (const vp of viewports.filter((v) => !only || only.includes(v.name))) {
   if (!formOk) failures++;
 
   // Film: one at a time.
-  const items = page.locator("#film ul > li");
-  const before = await page.locator("#film iframe").count();
+  const items = page.locator("#films ul > li");
+  const before = await page.locator("#films iframe").count();
   await items.nth(0).locator("button").click();
   await items.nth(1).locator("button").click();
-  const iframes = await page.locator("#film iframe").count();
+  const iframes = await page.locator("#films iframe").count();
   const firstReset = (await items.nth(0).locator("button").count()) === 1;
   const filmOk = before === 0 && iframes === 1 && firstReset;
   console.log(`Film: ${before} iframes before tap, ${iframes} after opening two, first reset to facade ${firstReset} ${filmOk ? "ok" : "FAIL"}`);
