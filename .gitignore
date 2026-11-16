@@ -1,0 +1,21 @@
+# dependencies
+/node_modules
+
+# next.js
+/.next/
+/out/
+next-env.d.ts
+*.tsbuildinfo
+
+# media masters downloaded from the listings (re-create with `npm run media:fetch`)
+/.media-src/
+
+# verification output
+/.artifacts/
+
+# misc
+.DS_Store
+*.pem
+npm-debug.log*
+.env*.local
+.vercel
